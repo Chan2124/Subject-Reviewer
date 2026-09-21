@@ -105,6 +105,39 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
     try { audioCtxRef.current?.close(); audioCtxRef.current = null; } catch (_) {}
   }, []);
 
+  // ─── Wake Lock API — Keep screen awake while playing ───────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const wakeLockRef = useRef<any>(null);
+
+  const requestWakeLock = useCallback(async () => {
+    if (typeof navigator !== 'undefined' && 'wakeLock' in navigator) {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
+      } catch (err) {
+        console.error('Wake Lock error:', err);
+      }
+    }
+  }, []);
+
+  const releaseWakeLock = useCallback(() => {
+    if (wakeLockRef.current) {
+      wakeLockRef.current.release().catch(console.error);
+      wakeLockRef.current = null;
+    }
+  }, []);
+
+  // Re-request wake lock if tab becomes visible again while playing
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && isPlayingRef.current) {
+        requestWakeLock();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [requestWakeLock]);
+
   // ─── Update Media Session metadata & playback state ────────────
   const setMediaPlaying = useCallback((item: LessonItem) => {
     if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
@@ -130,6 +163,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
       setCurrentIndex(0);
       currentIndexRef.current = 0;
       stopSilentAudio();
+      releaseWakeLock();
       if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
       return;
     }
@@ -157,6 +191,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
           setCurrentIndex(0);
           currentIndexRef.current = 0;
           stopSilentAudio();
+          releaseWakeLock();
           if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
         }
         return;
@@ -174,6 +209,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
           setIsPlaying(false);
           setIsPaused(false);
           stopSilentAudio();
+          releaseWakeLock();
         }
       };
 
@@ -188,7 +224,8 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
     setIsPaused(false);
     isPausedRef.current = false;
     setMediaPlaying(item);
-  }, [stopSilentAudio, setMediaPlaying]);
+    requestWakeLock();
+  }, [stopSilentAudio, setMediaPlaying, requestWakeLock, releaseWakeLock]);
 
   // ─── Register Media Session action handlers (lock screen controls) ─
   useEffect(() => {
@@ -199,6 +236,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
       setIsPaused(false);
       setIsPlaying(true);
       isPausedRef.current = false;
+      requestWakeLock();
       navigator.mediaSession.playbackState = 'playing';
     };
 
@@ -216,6 +254,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
       setIsPaused(true);
       setIsPlaying(false);
       isPausedRef.current = true;
+      releaseWakeLock();
       navigator.mediaSession.playbackState = 'paused';
     });
 
@@ -235,6 +274,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
       setCurrentIndex(0);
       currentIndexRef.current = 0;
       stopSilentAudio();
+      releaseWakeLock();
       navigator.mediaSession.playbackState = 'none';
     });
 
@@ -244,7 +284,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
           .forEach(a => navigator.mediaSession.setActionHandler(a, null));
       } catch (_) {}
     };
-  }, [playAtIndex, startSilentAudio, stopSilentAudio]);
+  }, [playAtIndex, startSilentAudio, stopSilentAudio, requestWakeLock, releaseWakeLock]);
 
   // Stop when category changes
   useEffect(() => {
@@ -254,6 +294,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
     setCurrentIndex(0);
     currentIndexRef.current = 0;
     stopSilentAudio();
+    releaseWakeLock();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory]);
 
@@ -261,7 +302,8 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
   useEffect(() => () => {
     window.speechSynthesis.cancel();
     stopSilentAudio();
-  }, [stopSilentAudio]);
+    releaseWakeLock();
+  }, [stopSilentAudio, releaseWakeLock]);
 
   // ─── UI handlers ───────────────────────────────────────────────
   const handlePlay = () => {
@@ -269,6 +311,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
       window.speechSynthesis.resume();
       setIsPaused(false);
       setIsPlaying(true);
+      requestWakeLock();
       if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
     } else {
       startSilentAudio();
@@ -280,6 +323,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
     window.speechSynthesis.pause();
     setIsPaused(true);
     setIsPlaying(false);
+    releaseWakeLock();
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
   };
 
@@ -290,6 +334,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
     setCurrentIndex(0);
     currentIndexRef.current = 0;
     stopSilentAudio();
+    releaseWakeLock();
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
   };
 
@@ -336,7 +381,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
         </p>
         {isPlaying && (
           <p className="text-xs text-[var(--ok)] mt-1">
-            🎧 Playing in background — lock your screen freely
+            🎧 Playing - screen will stay awake automatically
           </p>
         )}
       </div>
