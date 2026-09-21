@@ -1,0 +1,2317 @@
+{
+  "id": "netcom",
+  "title": "NetCom Study Console",
+  "description": "OSI, Subnetting & Cisco IOS",
+  "categories": [
+    "OSI",
+    "L2 & Switching",
+    "L3 & IP",
+    "Subnetting",
+    "Physical",
+    "Routing & NAT",
+    "DHCP",
+    "Cisco IOS",
+    "Gray Areas"
+  ],
+  "cards": [
+    {
+      "category": "OSI",
+      "question": "List the 7 OSI layers in exact order, from Layer 7 down to Layer 1.",
+      "answer": "<ol reversed><li><b>Application</b></li><li><b>Presentation</b></li><li><b>Session</b></li><li><b>Transport</b></li><li><b>Network</b></li><li><b>Data Link</b></li><li><b>Physical</b></li></ol>",
+      "explanation": "Top-down mnemonic: <b>A</b>ll <b>P</b>eople <b>S</b>eem <b>T</b>o <b>N</b>eed <b>D</b>ata <b>P</b>rocessing. Bottom-up: <b>P</b>lease <b>D</b>o <b>N</b>ot <b>T</b>hrow <b>S</b>ausage <b>P</b>izza <b>A</b>way. The sender <i>encapsulates</i> from Layer 7 downward; the receiver <i>de-encapsulates</i> from Layer 1 upward."
+    },
+    {
+      "category": "OSI",
+      "question": "What is the Protocol Data Unit (PDU) at each layer?",
+      "answer": "<div class=\"scroll\"><table><tr><th>Layer</th><th>PDU</th></tr><tr><td>7 Application</td><td>Data</td></tr><tr><td>6 Presentation</td><td>Data</td></tr><tr><td>5 Session</td><td>Data</td></tr><tr><td>4 Transport</td><td><b>Segment</b> (TCP) or <b>Datagram</b> (UDP)</td></tr><tr><td>3 Network</td><td><b>Packet</b></td></tr><tr><td>2 Data Link</td><td><b>Frame</b></td></tr><tr><td>1 Physical</td><td><b>Bits</b></td></tr></table></div>",
+      "explanation": "Layers 5 to 7 all carry plain \"Data\". Only Layer 2 adds both a header and a trailer (the Frame Check Sequence). Layer 1 adds no headers; it converts bits to electrical impulses, light pulses or radio waves."
+    },
+    {
+      "category": "OSI",
+      "question": "What does each layer actually do?",
+      "answer": "<ul><li><b>7 Application:</b> network services for software (HTTP/HTTPS, FTP, SMTP)</li><li><b>6 Presentation:</b> translation, encryption, compression (SSL/TLS, JPEG, MPEG)</li><li><b>5 Session:</b> set up, maintain and cleanly end sessions; checkpoints (NetBIOS, PPTP; Zoom, Remote Desktop)</li><li><b>4 Transport:</b> end-to-end delivery, ports, flow control, reliability (TCP, UDP)</li><li><b>3 Network:</b> logical addressing and routing between networks (IP, ICMP, OSPF, BGP; routers)</li><li><b>2 Data Link:</b> node-to-node delivery inside a LAN, MAC addressing, error detection (Ethernet, <b>CSMA/CD</b> for wired collision detection, <b>CSMA/CA</b> for Wi-Fi collision avoidance; NICs, switches)</li><li><b>1 Physical:</b> raw bit transmission over a medium (UTP, fiber, radio; hubs and <b>MAUs</b>, Media Access Units)</li></ul>",
+      "explanation": "Think \"which question does this layer answer?\" L7: what service? L6: what format? L5: which conversation? L4: which process/port and how reliably? L3: which network? L2: which local device? L1: which signal? A MAU is functionally a hub for legacy/Token Ring-style shared media; CSMA/CD lets wired Ethernet devices detect and recover from collisions, while CSMA/CA lets Wi-Fi devices avoid them up front since wireless can't reliably detect a collision while transmitting."
+    },
+    {
+      "category": "OSI",
+      "question": "What does each layer add during encapsulation?",
+      "answer": "<ul><li>L7: generates the raw payload from user interaction</li><li>L6: formats/encrypts the data</li><li>L5: session identifiers</li><li>L4: <b>ports</b>; TCP also adds sequence and acknowledgment numbers</li><li>L3: IP header with source/destination IP and TTL</li><li>L2: header (source/destination MAC) plus trailer (FCS)</li><li>L1: nothing; just signals</li></ul>",
+      "explanation": "On receipt, the NIC recomputes the FCS. If it matches, the header/trailer are stripped and the payload is passed up the stack."
+    },
+    {
+      "category": "OSI",
+      "question": "A layer-by-layer failure guide: which layer matches each symptom?",
+      "answer": "<div class=\"scroll\"><table><tr><th>Symptom</th><th>Layer</th></tr><tr><td>Dead link, cut cable, burnt port, Wi-Fi radio off</td><td>1</td></tr><tr><td>Cannot talk to local neighbors; switching loop storm; MAC conflicts</td><td>2</td></tr><tr><td>LAN works but <code>ping 8.8.8.8</code> fails (no default gateway / routing black hole)</td><td>3</td></tr><tr><td>Pings work, app times out (firewall blocks TCP 443)</td><td>4</td></tr><tr><td>Auth token expires; persistent DB connection drops</td><td>5</td></tr><tr><td>SSL certificate error; scrambled video artifacts</td><td>6</td></tr><tr><td>Infrastructure fine but API returns HTTP 500</td><td>7</td></tr></table></div>",
+      "explanation": "Work bottom-up: confirm the link, then local delivery, then routing, then the port/service, then the application."
+    },
+    {
+      "category": "OSI",
+      "question": "Where does ARP belong in the OSI model?",
+      "answer": "On the boundary between Layer 2 and Layer 3, but engineers classify it as <b>Layer 2</b>.",
+      "explanation": "ARP resolves a known Layer 3 IP address into an unknown Layer 2 MAC address. Its messages are encapsulated directly in Ethernet frames and never leave the LAN, hence the Layer 2 label, even though its whole job is to serve Layer 3."
+    },
+    {
+      "category": "OSI",
+      "question": "Why is ICMP considered a Layer 3 protocol?",
+      "answer": "Because it is tightly integrated with IP and uses <b>no ports</b>, even though it is packaged inside an IP packet.",
+      "explanation": "An ICMP message looks like a Layer 4 payload, but it reports routing errors and congestion on behalf of IP (ping to 8.8.8.8, TTL Exceeded, Destination Unreachable), so it sits at Layer 3."
+    },
+    {
+      "category": "OSI",
+      "question": "How do Layer 4 ports map to OS sockets?",
+      "answer": "A port is a logical number (e.g. 80 for HTTP); a <b>socket</b> is the OS kernel's binding of <b>IP address + port</b> (e.g. <code>192.168.1.50:80</code>).",
+      "explanation": "When a Layer 4 segment arrives, the OS reads the destination port, finds the matching socket, and hands the payload to the listening process (your web server)."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "Describe the anatomy of a 48-bit MAC address.",
+      "answer": "<div class=\"scroll\"><table><tr><th>Part</th><th>Position</th><th>Meaning</th></tr><tr><td>OUI</td><td>First 24 bits (bytes 1-3)</td><td>Vendor ID assigned by the IEEE</td></tr><tr><td>I/G bit</td><td>LSB of byte 1</td><td>0 = unicast, 1 = multicast/broadcast</td></tr><tr><td>U/L bit</td><td>2nd LSB of byte 1</td><td>0 = universally (factory) administered, 1 = locally administered</td></tr><tr><td>NIC-specific</td><td>Last 24 bits (bytes 4-6)</td><td>Serial number assigned by the manufacturer</td></tr></table></div>",
+      "explanation": "Written as six hex pairs, for example <code>15-EF-A3-45-9B-57</code>. It is burned into the NIC, like a VIN on a car. Switches forward frames exclusively based on MAC addresses."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "The first byte of a MAC is <code>FC</code>. Read the I/G and U/L flags. What is the fast shortcut for spotting locally administered MACs?",
+      "answer": "<code>FC</code> = <code>1111 1100</code>. Far-right bit <b>0</b> = unicast; second-from-right bit <b>0</b> = universally administered (factory).",
+      "explanation": "One hex digit is one nibble (4 bits). Shortcut: if the <b>second hex digit</b> of the MAC is <b>2, 6, A or E</b> (e.g. <code>02-50-56...</code>), it is locally administered, such as a spoofed MAC or a hypervisor-assigned one."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "How does a switch learn, forward and flood? What is unknown unicast flooding?",
+      "answer": "<ol><li><b>Learn:</b> read the <b>source MAC</b>, store it with the ingress port in the CAM table.</li><li><b>Forward:</b> read the <b>destination MAC</b>; if it is in the CAM table, send out only that port.</li><li><b>Flood:</b> if it is unknown, send out every port except the one it arrived on (unknown unicast flooding).</li></ol>",
+      "explanation": "Analogy: a mailroom clerk notes which room you walked out of when you drop off a letter. Check the table on a Cisco switch with <code>show mac address-table</code>."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "Collision domain vs. broadcast domain: what creates and what limits each?",
+      "answer": "<b>Collision domain:</b> hubs create one big shared domain; a modern switch gives every port its own (full-duplex removes collisions). <b>Broadcast domain:</b> a whole VLAN; only a Layer 3 router stops broadcasts.",
+      "explanation": "Switches forward broadcasts (such as ARP requests) out of all ports. That is why routers, not switches, mark the boundary between broadcast domains."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "What is MAC flapping?",
+      "answer": "The CAM table entry for one MAC rapidly jumps between ports because two devices on the same VLAN share the same MAC address.",
+      "explanation": "Typical cause: a hypervisor cloning error or misconfiguration. Frame 1 arrives on Port 2, so the MAC maps to Port 2; Frame 2 arrives on Port 8, so it is overwritten to Port 8. Result: high switch CPU and heavy packet loss because return traffic goes to the wrong port."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "How does ARP work, and what is a Gratuitous ARP (GARP) used for?",
+      "answer": "ARP: a host broadcasts \"Who has 192.168.1.50? Tell my MAC,\" and the owner replies with a <b>unicast</b> frame containing its MAC. GARP: an unsolicited ARP reply.",
+      "explanation": "GARP example: an HA firewall fails over and the backup assumes the primary's IP. It broadcasts a GARP so all local switches and hosts immediately update their tables to the backup's port, minimizing downtime."
+    },
+    {
+      "category": "L2 & Switching",
+      "question": "What is ARP poisoning and how do switches defend against it?",
+      "answer": "An attacker sends a forged ARP reply (\"I am the default gateway\") so the victim caches the attacker's MAC: a <b>man-in-the-middle</b> attack. Defense: <b>DHCP Snooping + Dynamic ARP Inspection (DAI)</b>.",
+      "explanation": "ARP is stateless and unauthenticated. DHCP Snooping watches DORA transactions and builds a trusted binding table (e.g. MAC AA-AA belongs to IP .50 on Port 4). DAI checks every ARP packet against it and drops mismatches in hardware. Cryptography was not added to ARP because per-resolution hashing would add unacceptable CPU overhead and latency."
+    },
+    {
+      "category": "L3 & IP",
+      "question": "Explain the key IPv4 header fields: TTL, Protocol, fragmentation fields and Header Checksum.",
+      "answer": "<ul><li><b>TTL (8 bits):</b> decremented at every router; at 0 the packet is dropped and ICMP Time Exceeded is sent.</li><li><b>Protocol (8 bits):</b> TCP = 6, UDP = 17, ICMP = 1.</li><li><b>Identification / Flags (DF, MF) / Fragment Offset:</b> group, control and order fragments when a packet exceeds the MTU (1500 bytes on Ethernet).</li><li><b>Header Checksum:</b> integrity of the IP header.</li></ul>",
+      "explanation": "The header is a 20-byte control structure (minimum). Because TTL changes at every hop, every router must <b>recalculate and rewrite the checksum</b>."
+    },
+    {
+      "category": "L3 & IP",
+      "question": "Classful vs. CIDR: what changed and what does /24 mean?",
+      "answer": "Classful: Class A 10.0.0.0/8, Class B 172.16.0.0/16, Class C 192.168.0.0/24 (fixed boundaries). CIDR removes fixed boundaries; <b>/24</b> means the first 24 bits are the network portion.",
+      "explanation": "Classful routing wasted millions of addresses. Every address is a Network ID (street) plus a Host ID (house). The private Class C range 192.168.0.0 to 192.168.255.255 is for LANs and needs NAT to reach the Internet."
+    },
+    {
+      "category": "L3 & IP",
+      "question": "Define the four identifiers of every subnet: mask, Network ID, Broadcast ID and usable host range.",
+      "answer": "<ul><li><b>Subnet mask:</b> 32-bit rulebook; 1s = network bits, 0s = host bits. Routers apply a bitwise AND with the destination IP.</li><li><b>Network ID:</b> lowest address (host bits all 0); identifies the subnet; not assignable.</li><li><b>Broadcast ID:</b> highest address (host bits all 1); reaches all hosts; not assignable.</li><li><b>Usable range:</b> everything between; count = 2<sup>h</sup> &minus; 2 (h = host bits).</li></ul>",
+      "explanation": "Example: 192.168.1.0/24 has Network ID .0, Broadcast .255, usable .1 to .254 (254 hosts)."
+    },
+    {
+      "category": "Subnetting",
+      "question": "Why do you almost always see 255.255.255.0 on your own PC?",
+      "answer": "It is the default (/24) for consumer routers and standard office networks: 254 usable hosts.",
+      "explanation": "Plenty of room for laptops and phones, yet small enough that broadcast traffic will not overwhelm devices. Enterprises customize with VLSM (e.g. <code>255.255.255.252</code> for a router-to-router link, avoiding 252 wasted addresses)."
+    },
+    {
+      "category": "Subnetting",
+      "question": "VLSM walkthrough: carve 192.168.4.0/24 into 60-host (Front Desk), 25-host (Storage) and 2-host (WAN link) subnets.",
+      "answer": "<div class=\"scroll\"><table><tr><th>Subnet</th><th>Host bits</th><th>CIDR / Mask</th><th>Network ID</th><th>Usable range</th><th>Broadcast</th></tr><tr><td>Front Desk (60)</td><td>6 (62 usable)</td><td>/26 <code>255.255.255.192</code></td><td>192.168.4.0</td><td>.1 to .62</td><td>.63</td></tr><tr><td>Storage (25)</td><td>5 (30 usable)</td><td>/27 <code>255.255.255.224</code></td><td>192.168.4.64</td><td>.65 to .94</td><td>.95</td></tr><tr><td>WAN link (2)</td><td>2 (2 usable)</td><td>/30 <code>255.255.255.252</code></td><td>192.168.4.96</td><td>.97 to .98</td><td>.99</td></tr></table></div>",
+      "explanation": "Rule: carve from the largest requirement to the smallest, and start each new Network ID immediately after the previous Broadcast ID. A /27 is 32 addresses, so 64 + 32 = 96 is the next free boundary.<div class=\"note\"><b>Reviewer correction:</b> the PDF's Storage row shows <code>.65-.126</code> and broadcast <code>.127</code>; those are /26 numbers. A /27 starting at .64 ends at .95 (30 hosts).</div>"
+    },
+    {
+      "category": "Subnetting",
+      "question": "Why does a /31 mask work on point-to-point links (RFC 3021)?",
+      "answer": "A /31 leaves 1 host bit (two addresses). On a link with exactly two devices, no broadcast is needed, so both addresses (.0 and .1) are assigned to the router interfaces.",
+      "explanation": "Traditional rules reserve the Network and Broadcast IDs, which would leave zero usable hosts. RFC 3021 changed the OS logic for point-to-point links, disabling broadcast behavior and saving huge numbers of addresses across ISP backbones."
+    },
+    {
+      "category": "L3 & IP",
+      "question": "IPv6 core architecture: structure, shorthand rules, SLAAC and the end of broadcast.",
+      "answer": "<ul><li>128 bits = 8 hextets of 16 bits, e.g. <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code></li><li>Drop leading zeros in a hextet; replace one run of all-zero hextets with <code>::</code> (only once): <code>2001:db8:85a3::8a2e:370:7334</code></li><li>Subnets are standardized at <b>/64</b> for SLAAC.</li><li>No broadcast: unicast, anycast and targeted multicast only.</li></ul>",
+      "explanation": "SLAAC (EUI-64): split the 48-bit MAC in half, insert <code>FFFE</code> in the middle (24 + 16 + 24 = 64 bits) and flip the U/L bit. The device builds its own unique Host ID without DHCP. IPv6 restores end-to-end routing without NAT."
+    },
+    {
+      "category": "Gray Areas",
+      "question": "A packet exceeds the path MTU and the Don't Fragment (DF) bit is 1. What happens?",
+      "answer": "The router drops it and sends back <b>ICMP Type 3, Code 4</b> (\"Fragmentation Needed and DF Set\") containing the egress MTU. This is <b>Path MTU Discovery (PMTUD)</b>.",
+      "explanation": "Steps: (1) hardware detects the MTU mismatch and drops the packet; (2) the router CPU generates the ICMP message; (3) it inserts the exact MTU (e.g. 1400); (4) the source shrinks its TCP Maximum Segment Size for that session."
+    },
+    {
+      "category": "Physical",
+      "question": "Compare copper categories: speed, frequency and maximum distance.",
+      "answer": "<div class=\"scroll\"><table><tr><th>Category</th><th>Speed</th><th>Frequency</th><th>Distance</th></tr><tr><td>Cat5e</td><td>1 Gbps</td><td>100 MHz</td><td>100 m</td></tr><tr><td>Cat6</td><td>10 Gbps</td><td>250 MHz</td><td>55 m at 10G (100 m at 1G)</td></tr><tr><td>Cat6a</td><td>10 Gbps</td><td>500 MHz</td><td>100 m</td></tr><tr><td>Cat7</td><td>10 Gbps</td><td>600 MHz</td><td>100 m</td></tr><tr><td>Cat8</td><td>40 Gbps</td><td>2000 MHz</td><td>30 m</td></tr></table></div>",
+      "explanation": "Standard Ethernet copper is limited to <b>100 m (328 ft)</b> per channel. Cat6 uses a plastic spline to cut crosstalk; Cat6a has thicker insulation and tighter twists; Cat7 needs shielding on every pair; Cat8 is for short data-center switch-to-server links."
+    },
+    {
+      "category": "Physical",
+      "question": "UTP vs. STP: how does each fight interference, and what is the STP grounding requirement?",
+      "answer": "<b>UTP</b> relies on tightly twisted pairs whose opposing fields cancel (destructive interference). <b>STP</b> adds foil or braided shielding and <b>must be grounded at the patch panel</b>.",
+      "explanation": "Copper acts as an antenna for EMI (fluorescent lights, motors, adjacent cables: alien crosstalk). Without a ground, an STP shield traps ambient EMI and destroys data integrity."
+    },
+    {
+      "category": "Physical",
+      "question": "T568A vs. T568B pinouts, straight-through vs. crossover cables, Auto-MDIX and termination tools.",
+      "answer": "<div class=\"scroll\"><table><tr><th>Pin</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr><tr><td>T568A</td><td>W/Green</td><td>Green</td><td>W/Orange</td><td>Blue</td><td>W/Blue</td><td>Orange</td><td>W/Brown</td><td>Brown</td></tr><tr><td>T568B</td><td>W/Orange</td><td>Orange</td><td>W/Green</td><td>Blue</td><td>W/Blue</td><td>Green</td><td>W/Brown</td><td>Brown</td></tr></table></div><ul><li><b>Straight-through</b> (B to B): different devices, e.g. switch to PC.</li><li><b>Crossover</b> (A to B): like devices, e.g. switch to switch.</li></ul>",
+      "explanation": "Modern switches use <b>Auto-MDIX</b> to detect the transmit pins and flip Tx/Rx automatically, making crossovers largely obsolete. Tools: wire stripper (removes the jacket), crimping tool (secures the RJ-45), punch-down tool (seats wires in patch panels/keystones)."
+    },
+    {
+      "category": "Physical",
+      "question": "Single-mode vs. multi-mode fiber.",
+      "answer": "<div class=\"scroll\"><table><tr><th></th><th>Multi-mode (MMF)</th><th>Single-mode (SMF)</th></tr><tr><td>Core</td><td>50 or 62.5 microns</td><td>~9 microns</td></tr><tr><td>Light source</td><td>LED or VCSEL</td><td>High-powered laser</td></tr><tr><td>Modal dispersion</td><td>High</td><td>Zero</td></tr><tr><td>Use / reach</td><td>Short-haul LAN, roughly 300 to 550 m</td><td>Long-haul WAN, 10 to 100+ km</td></tr></table></div>",
+      "explanation": "In MMF, light rays take different angles (modes) and arrive at different times, smearing the signal. SMF's narrow core allows one direct path. Fiber is 100% immune to EMI."
+    },
+    {
+      "category": "Physical",
+      "question": "Name the common physical-layer pitfalls and their symptoms.",
+      "answer": "<ul><li><b>Attenuation:</b> run over 100 m; signal falls below the NIC's threshold; dead link or heavy loss.</li><li><b>Near-End Crosstalk (NEXT):</b> pairs untwisted too far at a keystone; signal reflections, high CRC errors.</li><li><b>Duplex mismatch:</b> one side full, the other half; CLI shows skyrocketing <b>late collisions</b>.</li></ul>",
+      "explanation": "When Layer 1 fails silently you see intermittent drops, crippling latency and CRC errors on switch interfaces."
+    },
+    {
+      "category": "Routing & NAT",
+      "question": "Compare how a Layer 2 switch and a Layer 3 router operate.",
+      "answer": "<div class=\"scroll\"><table><tr><th></th><th>Switch (L2)</th><th>Router (L3)</th></tr><tr><td>Addresses</td><td>MAC (physical)</td><td>IP (logical)</td></tr><tr><td>Scope</td><td>Same LAN subnet</td><td>Between subnets and the Internet</td></tr><tr><td>Decision table</td><td>CAM table</td><td>Routing table</td></tr><tr><td>Broadcasts</td><td>Forwards out all ports</td><td>Blocks them (domain boundary)</td></tr></table></div>",
+      "explanation": "A switch is an office mailroom (cubicle to cubicle). A router is a city-to-city postal center: it strips the L2 frame, reads the destination IP, consults its routing table and picks the next hop."
+    },
+    {
+      "category": "Routing & NAT",
+      "question": "Why does a host need a Default Gateway?",
+      "answer": "The switch is a \"flat\" Layer 2 environment. A host ANDs the destination with its mask, sees 8.8.8.8 is off-subnet, and must send it to the gateway (e.g. 192.168.1.1), its exit door.",
+      "explanation": "The PC cannot broadcast a MAC request for Google because routers block broadcasts, so it ARPs for the <b>gateway's</b> MAC instead."
+    },
+    {
+      "category": "Routing & NAT",
+      "question": "Walk through the end-to-end journey of a ping from 192.168.1.50 to 8.8.8.8.",
+      "answer": "<ol><li>PC decides 8.8.8.8 is external and targets the default gateway.</li><li>ARP for the gateway (192.168.1.1) if not cached; router replies with its MAC.</li><li>PC sends frame: L2 dst = router MAC; L3 src 192.168.1.50, dst 8.8.8.8.</li><li>Router sees its own MAC and <b>strips the L2 header/trailer</b>.</li><li>Routing table (or 0.0.0.0/0) chooses the WAN next hop; TTL 64 becomes 63.</li><li>Router builds a <b>new frame</b> (src = router WAN MAC, dst = ISP router MAC). IPs untouched.</li></ol>",
+      "explanation": "L3 IPs never change (excluding NAT); L2 MACs are stripped and rewritten at <b>every</b> router hop until the packet reaches Google's server."
+    },
+    {
+      "category": "Routing & NAT",
+      "question": "What are NAT and PAT, and how does the state table work?",
+      "answer": "Private (RFC 1918) addresses are not routable on the Internet. The edge router replaces the private source IP with its public IP and tracks connections by Layer 4 source port (<b>PAT / NAT overload</b>).",
+      "explanation": "Outbound: 192.168.1.50 becomes 203.0.113.5 and the router records \"port 55555 belongs to 192.168.1.50.\" Inbound: the reply to 203.0.113.5:55555 is matched in the state table, the destination IP is rewritten back to the private IP, and it is forwarded to the LAN. One public IP serves all 254 LAN devices."
+    },
+    {
+      "category": "Gray Areas",
+      "question": "Do 802.1Q VLAN tags and 802.1p CoS survive a routed hop? How does QoS survive a WAN?",
+      "answer": "No. They live in the Ethernet header, which the router strips. The ingress router must <b>map CoS to the IP header's DSCP field</b>.",
+      "explanation": "The IP header remains intact across hops, so downstream routers read DSCP and apply their own local Layer 2 queuing priorities."
+    },
+    {
+      "category": "Gray Areas",
+      "question": "How does a router decide whether a packet is for its Control Plane or Data Plane?",
+      "answer": "<b>Data plane:</b> destination is a remote network; the ASIC does a <b>FIB</b> lookup, rewrites the MAC headers, and forwards at wire speed with no CPU. <b>Control plane:</b> destination is one of the router's own interface IPs (or a multicast like OSPF 224.0.0.5); the ASIC <b>punts</b> it to the CPU.",
+      "explanation": "Example: an SSH session to the router is control plane; a packet transiting to 8.8.8.8 is data plane."
+    },
+    {
+      "category": "Gray Areas",
+      "question": "Why does IP need a TTL when routing protocols already prevent loops?",
+      "answer": "They protect different planes. Loop-prevention (Split Horizon, Poison Reverse, AS-Path) protects the <b>control plane</b>; TTL is the <b>data plane</b> fail-safe fuse.",
+      "explanation": "Convergence delays, transient states or static-route mistakes can still create a real loop. TTL decrements to 0 and kills the packet, preventing a storm that would melt the links."
+    },
+    {
+      "category": "DHCP",
+      "question": "Explain the DORA process with layer details.",
+      "answer": "<div class=\"scroll\"><table><tr><th>Step</th><th>L2</th><th>L3</th><th>UDP</th></tr><tr><td><b>D</b>iscover</td><td>Client MAC to FF:FF:FF:FF:FF:FF</td><td>0.0.0.0 to 255.255.255.255</td><td>68 to 67</td></tr><tr><td><b>O</b>ffer</td><td>Server MAC to Client MAC (or broadcast)</td><td>Server IP to 255.255.255.255</td><td>67 to 68</td></tr><tr><td><b>R</b>equest</td><td>Client MAC to broadcast</td><td>0.0.0.0 to 255.255.255.255</td><td>68 to 67</td></tr><tr><td><b>A</b>cknowledge</td><td>Server MAC to Client MAC</td><td>Server IP to 255.255.255.255</td><td>67 to 68</td></tr></table></div>",
+      "explanation": "The client has no IP, so it relies on L2 MACs and L3 broadcasts. The Request is broadcast so the winning server hears \"I accept\" and losing servers return their offers to the pool. The proposed IP travels inside the DHCP payload; the OS validates it before binding it to the interface."
+    },
+    {
+      "category": "DHCP",
+      "question": "Static vs. DHCP addressing, and what is APIPA?",
+      "answer": "<b>Static:</b> routers, switches, servers, printers (must never change). <b>DHCP:</b> laptops, phones, tablets (transient). <b>APIPA:</b> if no DHCP server answers, the OS self-assigns <code>169.254.x.x</code>.",
+      "explanation": "\"Obtain an IP address automatically\" in Windows means DHCP. APIPA allows local-link communication only; it is not routable across the Internet."
+    },
+    {
+      "category": "DHCP",
+      "question": "How does a DHCP Relay Agent (ip helper-address) let clients reach a server on another subnet?",
+      "answer": "Routers drop broadcasts, so the router converts the client's UDP 67 broadcast into a <b>unicast</b> to the central DHCP server and inserts its client-facing interface IP in the <b>giaddr</b> field.",
+      "explanation": "Configure it on the interface <b>facing the clients</b>, not the server. The server reads giaddr to pick the right pool and returns a unicast Offer via the router.<pre class=\"cli\">R1(config)# interface gigabitEthernet0/1\nR1(config-if)# ip address 192.168.10.1 255.255.255.0\nR1(config-if)# ip helper-address 10.0.99.5</pre>"
+    },
+    {
+      "category": "DHCP",
+      "question": "What are the T1 and T2 lease timers?",
+      "answer": "<b>T1 (50%):</b> unicast DHCP Request to the original server to renew. <b>T2 (87.5%):</b> if that fails, broadcast a DHCP Request to any server (rebinding). At 100% the client must surrender the IP.",
+      "explanation": "These hidden timers ensure the client never unexpectedly loses its IP while the original server is up, and give it a second chance when the server is down."
+    },
+    {
+      "category": "DHCP",
+      "question": "Configure a Cisco router as a DHCP server. What is the order of operations?",
+      "answer": "<pre class=\"cli\">R1(config)# ip dhcp excluded-address 192.168.10.1 192.168.10.20\nR1(config)# ip dhcp pool VLAN10_USERS\nR1(dhcp-config)# network 192.168.10.0 255.255.255.0\nR1(dhcp-config)# default-router 192.168.10.1\nR1(dhcp-config)# dns-server 8.8.8.8 8.8.4.4\nR1(dhcp-config)# domain-name corp.local</pre>",
+      "explanation": "Exclude addresses <b>before</b> creating the pool (gateway, switches, servers, printers) or the router may lease an address already in use. The router matches the ingress interface's subnet to the pool's <code>network</code> statement. Benefit: no single point of failure; a branch keeps handing out IPs if the WAN drops."
+    },
+    {
+      "category": "DHCP",
+      "question": "Which commands verify and troubleshoot DHCP on a Cisco router?",
+      "answer": "<ul><li><code>show ip dhcp binding</code>: leased IP to MAC mapping with expiry</li><li><code>show ip dhcp pool</code>: total, leased and excluded addresses (scope exhaustion)</li><li><code>show ip dhcp conflict</code>: IPs the router found already in use</li><li><code>clear ip dhcp binding *</code> / <code>clear ip dhcp conflict *</code></li><li><code>debug ip dhcp server events</code>: live DORA logging</li></ul>",
+      "explanation": "Before offering an IP, the router pings it. If something replies, a rogue device is using it, so the address is flagged as a conflict and not leased."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "What are the Cisco IOS navigation modes and how do you enter each?",
+      "answer": "<div class=\"scroll\"><table><tr><th>Mode</th><th>Prompt</th><th>Enter with</th></tr><tr><td>User EXEC</td><td><code>Router&gt;</code></td><td>Default entry point</td></tr><tr><td>Privileged EXEC</td><td><code>Router#</code></td><td><code>enable</code></td></tr><tr><td>Global Configuration</td><td><code>Router(config)#</code></td><td><code>configure terminal</code></td></tr><tr><td>Interface</td><td><code>Router(config-if)#</code></td><td><code>interface g0/0/0</code></td></tr><tr><td>Line</td><td><code>Router(config-line)#</code></td><td><code>line con 0</code> or <code>line vty 0 4</code></td></tr></table></div>",
+      "explanation": "User EXEC is \"look but don't touch\" (ping, limited show). Privileged EXEC is the admin view (all show, debug, file commands, but no config changes). Global config affects the whole device. Interface mode applies IP, speed and duplex to one interface. Line mode configures console/VTY access."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "What is the command to save the configuration to NVRAM?",
+      "answer": "<code>copy running-config startup-config</code> (short: <code>copy run start</code>) or the legacy <code>write memory</code> (<code>wr</code>), from Privileged EXEC mode.",
+      "explanation": "RAM is volatile: without saving, a reboot wipes the running configuration. The startup configuration lives in NVRAM."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "Why does the first ping to a new gateway/destination time out while the next three succeed?",
+      "answer": "The first echo request is lost while <b>ARP</b> resolves the destination MAC. Once the MAC is cached, pings 2, 3 and 4 succeed.",
+      "explanation": "1) The PC generates an ICMP Echo Request. 2) Its ARP cache is empty. 3) It broadcasts an ARP request. 4) The reply returns and the MAC is cached. 5) Meanwhile the ping timeout (about 2 s) expires: \"Request timed out.\" Cisco IOS devices show the same effect as <code>.!!!!</code> (first ping fails, the rest succeed). Verify with <code>arp -a</code>."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "Packet Tracer vs. GNS3/EVE-NG/CML: simulation or emulation?",
+      "answer": "<b>Packet Tracer is a simulator</b> (it mimics protocol behavior and does not run real IOS). <b>GNS3, EVE-NG and Cisco CML are emulators</b> that boot real IOS binaries via hypervisors such as QEMU.",
+      "explanation": "Packet Tracer is perfect for CCNA-level work but cannot replicate obscure bugs, advanced BGP edge cases or hardware quirks."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "Realtime mode vs. Simulation mode in Packet Tracer?",
+      "answer": "<b>Realtime:</b> the network runs dynamically as in production. <b>Simulation:</b> a turn-based debugger that pauses time and intercepts every PDU.",
+      "explanation": "Click a paused packet's envelope to see Inbound/Outbound PDU Details across the OSI layers: watch the router strip the inbound L2 header and rewrite the outbound one while the L3 IPs stay untouched."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "What are the essential IOS CLI shortcuts (?, Tab, do)?",
+      "answer": "<ul><li><code>?</code> lists options: <code>ip ?</code> shows what can follow <code>ip</code>; <code>int?</code> lists commands starting with \"int\".</li><li><b>Tab</b> completes a command (<code>conf</code> becomes <code>configure</code>).</li><li><code>do</code> runs Privileged EXEC commands from a sub-mode: <code>do show ip route</code>.</li></ul>",
+      "explanation": "Normally show commands only work at the <code>#</code> prompt; <code>do</code> saves you from backing out of config mode."
+    },
+    {
+      "category": "Cisco IOS",
+      "question": "Build and harden the basic topology: what is the cabling and the router baseline configuration?",
+      "answer": "Devices: a PC, a Cisco Catalyst 2960 switch and a Cisco 4321 router. Cabling: PC to switch (straight-through), switch to router's GigabitEthernet port (straight-through).<pre class=\"cli\">Router> enable\nRouter# configure terminal\nRouter(config)# hostname R1-Core\nR1-Core(config)# enable secret Cisco123!\nR1-Core(config)# line con 0\nR1-Core(config-line)# password ConsolePass\nR1-Core(config-line)# login\nR1-Core(config-line)# exit\nR1-Core(config)# service password-encryption\nR1-Core(config)# banner motd # UNAUTHORIZED ACCESS PROHIBITED #\nR1-Core(config)# interface gigabitEthernet 0/0/0\nR1-Core(config-if)# description Link-to-LAN-Switch\nR1-Core(config-if)# ip address 192.168.1.1 255.255.255.0\nR1-Core(config-if)# no shutdown</pre>",
+      "explanation": "<code>login</code> forces the console to prompt for the password. <code>no shutdown</code> brings the interface (Layer 1 state) up. <div class=\"note\"><b>Exam nuance:</b> <code>enable secret</code> stores a hash, while <code>service password-encryption</code> applies only weak, reversible Type 7 encryption to plaintext passwords.</div>"
+    },
+    {
+      "category": "Gray Areas",
+      "question": "Two hosts on the same switch, A = 192.168.1.10/24 and B = 192.168.1.130/25. What goes wrong?",
+      "answer": "They disagree about what is on-link. A thinks B is local and sends directly; B thinks A is off-subnet and sends its replies to its <b>default gateway</b> (or has nowhere to send them).",
+      "explanation": "A's /24 covers .0 to .255, so B (.130) looks local and A ARPs for it. B's /25 covers .128 to .255, so A (.10) looks remote. ARP itself still works, because an ARP reply is unicast to the requester's MAC and does not consult the mask. The breakage is asymmetric Layer 3 return traffic that fails the TCP handshake.<div class=\"note\"><b>Reviewer correction:</b> the PDF says B sends its ARP <i>reply</i> to the gateway. It does not; the mismatch bites at Layer 3, on B's return traffic.</div>"
+    },
+    {
+      "category": "Gray Areas",
+      "question": "What happens if a host's Default Gateway IP belongs to an ordinary PC on the same subnet?",
+      "answer": "The host ARPs for that IP, the PC replies with its MAC, and frames reach it, but the PC silently drops them because IP forwarding is off: a <b>black hole</b>.",
+      "explanation": "The PC's NIC accepts the frame (L2 MAC matches). The OS then sees the L3 destination is not itself and, having no routing enabled in its kernel, discards the packet."
+    },
+    {
+      "category": "Gray Areas",
+      "question": "How does a switch avoid broadcast storms from cabling loops before STP converges?",
+      "answer": "Managed switches put ports in <b>Blocking/Listening</b> when a link comes up: BPDUs pass, but user data and broadcasts are dropped until the topology is proven loop-free.",
+      "explanation": "Classic STP takes roughly 30 to 50 seconds; Rapid STP about 2 seconds. An unmanaged switch has no STP, so a loop makes broadcasts circulate and multiply until buffers overflow and the CPU locks up."
+    },
+    {
+      "category": "Gray Areas",
+      "question": "What is TCP \"Zero Windowing\"?",
+      "answer": "The receiver advertises Window Size = 0 in its ACK because its buffer is full; the sender halts transmission.",
+      "explanation": "This is flow control protecting a slow client from a fast server (e.g. Gigabit server, 10 Mbps client). The sender periodically sends 1-byte Zero Window Probes; when the client drains its backlog it advertises a non-zero window and transmission resumes."
+    }
+  ],
+  "questions": [
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "Which layer routes packets between <i>different</i> networks?",
+      "options": [
+        "Layer 3: Network",
+        "Layer 2: Data Link",
+        "Layer 4: Transport",
+        "Layer 1: Physical"
+      ],
+      "explanation": "Layer 3 uses logical IP addressing; routers compare the destination IP to a routing table to choose the next hop. Layer 2 only moves frames inside one LAN.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "What is the PDU at the Data Link layer?",
+      "options": [
+        "Frame",
+        "Packet",
+        "Segment",
+        "Bits"
+      ],
+      "explanation": "L1 = Bits, L2 = Frame, L3 = Packet, L4 = Segment (TCP) or Datagram (UDP), L5 to L7 = Data.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "OSI",
+      "question": "Type the PDU name for <b>UDP</b> at Layer 4.",
+      "options": [
+        "datagram"
+      ],
+      "explanation": "TCP produces <b>segments</b>; UDP produces <b>datagrams</b>.",
+      "show": "datagram"
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "Which layer adds <i>both</i> a header and a trailer (FCS) during encapsulation?",
+      "options": [
+        "Data Link",
+        "Network",
+        "Transport",
+        "Physical"
+      ],
+      "explanation": "The L2 header holds source/destination MACs; the trailer carries the Frame Check Sequence for error detection. Layer 1 adds nothing.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "SSL/TLS, JPEG and MPEG belong to which layer?",
+      "options": [
+        "Presentation (6)",
+        "Session (5)",
+        "Application (7)",
+        "Transport (4)"
+      ],
+      "explanation": "The Presentation layer handles translation, encryption and compression.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "NetBIOS, PPTP, and managing a Zoom or Remote Desktop session are associated with which layer?",
+      "options": [
+        "Session (5)",
+        "Presentation (6)",
+        "Transport (4)",
+        "Application (7)"
+      ],
+      "explanation": "The Session layer establishes, maintains and cleanly terminates sessions and can restart from checkpoints.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "You can reach devices on your Wi-Fi but <code>ping 8.8.8.8</code> fails. What is the most likely problem?",
+      "options": [
+        "Layer 3: missing default gateway or routing black hole",
+        "Layer 1: cut cable",
+        "Layer 2: switching loop",
+        "Layer 7: HTTP 500 error"
+      ],
+      "explanation": "Local traffic works (L1/L2 fine) but nothing leaves the subnet, so suspect the gateway or routing.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "Pings succeed, but an application times out because a firewall blocks TCP 443. Which layer is at fault?",
+      "options": [
+        "Layer 4: Transport",
+        "Layer 3: Network",
+        "Layer 2: Data Link",
+        "Layer 1: Physical"
+      ],
+      "explanation": "Reachability (L3) is fine; port-based filtering happens at Layer 4.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "Data arrives intact but the browser shows an SSL certificate error. Which layer is implicated?",
+      "options": [
+        "Layer 6: Presentation",
+        "Layer 1: Physical",
+        "Layer 2: Data Link",
+        "Layer 3: Network"
+      ],
+      "explanation": "TLS negotiation and encryption are presentation-layer functions in this model.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "Why is ICMP placed at Layer 3 even though it rides inside an IP packet?",
+      "options": [
+        "It uses no ports and is integrated with IP to report routing errors",
+        "It uses TCP port 7",
+        "It is carried directly in Ethernet frames",
+        "It encrypts IP headers"
+      ],
+      "explanation": "ICMP has no port numbers, so it does not behave like a Layer 4 protocol; it reports errors and congestion on behalf of IP.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "ARP messages ride directly inside Ethernet frames and never leave the LAN. Where do engineers classify ARP?",
+      "options": [
+        "Layer 2 (serving Layer 3, on the L2/L3 boundary)",
+        "Layer 4",
+        "Layer 5",
+        "Layer 7"
+      ],
+      "explanation": "ARP resolves a known IP (L3) into an unknown MAC (L2). Because it is encapsulated directly in Ethernet, it is treated as Layer 2.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "A \"socket\" is best defined as:",
+      "options": [
+        "The OS binding of an IP address plus a port number (e.g. 192.168.1.50:80)",
+        "A physical switch port",
+        "A CAM table entry",
+        "The RJ-45 jack on a NIC"
+      ],
+      "explanation": "On arrival, the OS reads the destination port, finds the matching socket and hands the payload to the listening process.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "OSI",
+      "question": "Which pair correctly matches a Layer 2 media access protocol to its medium?",
+      "options": [
+        "CSMA/CD for wired Ethernet collision detection, CSMA/CA for Wi-Fi collision avoidance",
+        "CSMA/CA for wired Ethernet, CSMA/CD for Wi-Fi",
+        "CSMA/CD for both wired and wireless",
+        "Neither applies at Layer 2"
+      ],
+      "explanation": "Wired NICs can sense a collision while transmitting (CD); Wi-Fi radios generally cannot, so they avoid collisions in advance (CA) instead.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "OSI",
+      "question": "True or False: Only the Data Link layer's encapsulation adds both a header and a trailer.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "Layer 2 adds a header (source/destination MAC) plus a trailer (the Frame Check Sequence). Every other layer that adds anything only adds a header.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "OSI",
+      "question": "True or False: The Protocol Data Unit for Layers 5, 6, and 7 is called a Segment.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "Layers 5 to 7 all carry plain \"Data.\" Segment is the Layer 4 PDU for TCP specifically (UDP uses Datagram).",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "OSI",
+      "question": "True or False: ICMP messages use TCP or UDP port numbers, just like other transport-layer traffic.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "ICMP uses no ports at all. That is exactly why, even though it rides inside an IP packet, it is classified as a Layer 3 protocol rather than Layer 4.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "match",
+      "category": "OSI",
+      "question": "Match each OSI layer to its Protocol Data Unit (PDU).",
+      "pairs": [
+        [
+          "Layer 1 (Physical)",
+          "Bits"
+        ],
+        [
+          "Layer 2 (Data Link)",
+          "Frame"
+        ],
+        [
+          "Layer 3 (Network)",
+          "Packet"
+        ],
+        [
+          "Layer 4 (Transport, TCP)",
+          "Segment"
+        ]
+      ],
+      "explanation": "Layers 5 to 7 all use the generic PDU name \"Data.\" Only Layer 4 has two names depending on protocol: Segment for TCP, Datagram for UDP."
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "How long is an IEEE 802 MAC address?",
+      "options": [
+        "48 bits (6 bytes)",
+        "32 bits",
+        "64 bits",
+        "128 bits"
+      ],
+      "explanation": "Six hexadecimal pairs, e.g. 15-EF-A3-45-9B-57.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "What is the OUI in a MAC address?",
+      "options": [
+        "The first 24 bits, assigned by the IEEE to the manufacturer",
+        "The last 24 bits, a device serial number",
+        "The Frame Check Sequence",
+        "The I/G bit"
+      ],
+      "explanation": "OUI = bytes 1 to 3 (vendor). The last 24 bits are the NIC-specific ID.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "The first byte of a MAC is <code>FC</code> (1111 1100). What do the I/G and U/L bits indicate?",
+      "options": [
+        "Unicast, universally administered",
+        "Multicast, universally administered",
+        "Unicast, locally administered",
+        "Multicast, locally administered"
+      ],
+      "explanation": "I/G is the least significant bit (0 = unicast). U/L is the second least significant bit (0 = burned-in/universal).",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "Which MAC address is <b>locally administered</b> (e.g. assigned by a hypervisor)?",
+      "options": [
+        "02-50-56-11-22-33",
+        "00-50-56-11-22-33",
+        "FC-15-B4-11-22-33",
+        "3C-52-82-11-22-33"
+      ],
+      "explanation": "0x02 = 0000 0010, so the U/L bit is 1. Shortcut: a second hex digit of 2, 6, A or E means locally administered.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "A switch builds its CAM table by reading the:",
+      "options": [
+        "Source MAC of incoming frames",
+        "Destination MAC of incoming frames",
+        "Source IP of packets",
+        "DHCP Offer messages"
+      ],
+      "explanation": "It records the source MAC with the ingress port. The destination MAC is used for the forwarding lookup.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "The destination MAC is <b>not</b> in the CAM table. The switch:",
+      "options": [
+        "Floods the frame out all ports except the ingress port",
+        "Drops the frame",
+        "Sends an ICMP unreachable message",
+        "Sends it only out the uplink"
+      ],
+      "explanation": "This is unknown unicast flooding.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "L2 & Switching",
+      "question": "Type the Cisco IOS command that displays a switch's MAC address (CAM) table.",
+      "options": [
+        "show mac address-table",
+        "show mac-address-table"
+      ],
+      "explanation": "It lists MAC, VLAN, type and port. <code>show mac address-table</code> is current syntax; older IOS used <code>show mac-address-table</code>.",
+      "show": "show mac address-table"
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "How many collision domains does a modern full-duplex switch create?",
+      "options": [
+        "One per port",
+        "One in total",
+        "One per VLAN",
+        "None; collisions still happen on every port"
+      ],
+      "explanation": "Hubs create one shared collision domain; switches isolate every port.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "L2 & Switching",
+      "question": "A VLAN represents one ______ domain (fill in the blank).",
+      "options": [
+        "broadcast"
+      ],
+      "explanation": "Switches flood broadcasts within a VLAN; only a Layer 3 router stops them.",
+      "show": "broadcast"
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "The same MAC keeps appearing on Port 2, then Port 8, then Port 2 again. What is this and what causes it?",
+      "options": [
+        "MAC flapping: duplicate MACs (e.g. a cloned VM) on one VLAN",
+        "Unknown unicast flooding: a full CAM table",
+        "ARP poisoning: a gratuitous ARP",
+        "Duplex mismatch: late collisions"
+      ],
+      "explanation": "Each frame overwrites the CAM entry, spiking switch CPU and sending return traffic to the wrong port.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "An ARP request is sent as:",
+      "options": [
+        "A Layer 2 broadcast to FF:FF:FF:FF:FF:FF",
+        "A unicast to the default gateway",
+        "An ICMP echo",
+        "A routed IP multicast"
+      ],
+      "explanation": "\"Who has 192.168.1.50? Tell my MAC.\" The owner replies with a unicast frame.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "Why does an HA firewall send a Gratuitous ARP after failover?",
+      "options": [
+        "To make switches and hosts immediately update their tables to the new unit's port and MAC",
+        "To request a DHCP lease",
+        "To detect a loop",
+        "To encrypt ARP"
+      ],
+      "explanation": "The backup assumes the primary's IP and announces it so CAM and ARP entries update immediately.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "An attacker sends a forged ARP reply saying \"I am the default gateway.\" This is:",
+      "options": [
+        "ARP poisoning enabling a man-in-the-middle attack",
+        "MAC flapping",
+        "A DHCP relay",
+        "A TTL Exceeded event"
+      ],
+      "explanation": "ARP is stateless and unauthenticated, so the victim caches the attacker's MAC for the gateway IP.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L2 & Switching",
+      "question": "Which pair of switch features mitigates ARP spoofing?",
+      "options": [
+        "DHCP Snooping plus Dynamic ARP Inspection",
+        "STP plus BPDU Guard",
+        "Port mirroring plus SPAN",
+        "NAT plus PAT"
+      ],
+      "explanation": "Snooping builds a trusted IP-MAC-port binding table; DAI drops ARP packets that contradict it.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "L2 & Switching",
+      "question": "True or False: A MAC address is 48 bits (6 bytes) long.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "Written as six hexadecimal pairs, e.g. 15-EF-A3-45-9B-57: 3 bytes of OUI plus 3 bytes of NIC-specific serial number.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "L2 & Switching",
+      "question": "True or False: When a frame's destination MAC is already in the CAM table, the switch floods it out every port.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "That describes unknown unicast flooding, used only when the destination MAC is NOT in the table. A known MAC is forwarded out just the one recorded port.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "match",
+      "category": "L2 & Switching",
+      "question": "Match each part of a 48-bit MAC address to what it represents.",
+      "pairs": [
+        [
+          "OUI (first 24 bits)",
+          "Vendor ID assigned by the IEEE"
+        ],
+        [
+          "I/G bit",
+          "0 = unicast, 1 = multicast or broadcast"
+        ],
+        [
+          "U/L bit",
+          "0 = universally administered (factory), 1 = locally administered"
+        ],
+        [
+          "NIC-specific bits (last 24 bits)",
+          "Unique serial number set by the manufacturer"
+        ]
+      ],
+      "explanation": "I/G is the least significant bit of the first byte; U/L is the second-least significant bit. A second hex digit of 2, 6, A or E signals a locally administered (e.g. spoofed or hypervisor-assigned) MAC."
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "What does a router do to the IP TTL at each hop?",
+      "options": [
+        "Decrements it by 1; at 0 the packet is dropped and ICMP Time Exceeded is sent",
+        "Increments it by 1",
+        "Resets it to 255",
+        "Ignores it"
+      ],
+      "explanation": "TTL is an 8-bit anti-loop fuse.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "Which set of IPv4 Protocol field values is correct?",
+      "options": [
+        "TCP = 6, UDP = 17, ICMP = 1",
+        "TCP = 17, UDP = 6, ICMP = 1",
+        "TCP = 1, UDP = 6, ICMP = 17",
+        "TCP = 6, UDP = 1, ICMP = 17"
+      ],
+      "explanation": "The 8-bit Protocol field tells the receiver which upper-layer process gets the payload.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "Why must every router recalculate the IPv4 Header Checksum?",
+      "options": [
+        "The TTL changes at each hop",
+        "The MAC addresses change",
+        "The port numbers change",
+        "The payload is re-encrypted"
+      ],
+      "explanation": "Any change to the header invalidates the old checksum.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "Which IPv4 field groups fragments that belong to the same original packet?",
+      "options": [
+        "Identification",
+        "Flags",
+        "Fragment Offset",
+        "Protocol"
+      ],
+      "explanation": "Identification groups fragments; Flags carry DF/MF; Fragment Offset gives the reassembly order.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "L3 & IP",
+      "question": "What is the typical Ethernet MTU, in bytes?",
+      "options": [
+        "1500"
+      ],
+      "explanation": "Packets larger than the link MTU are fragmented (or dropped if DF = 1).",
+      "show": "1500"
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "A router finds the network portion of a destination by:",
+      "options": [
+        "A bitwise AND of the IP address and the subnet mask",
+        "A bitwise OR of the IP address and the mask",
+        "An XOR of the IP address and the MAC",
+        "Reading the TTL"
+      ],
+      "explanation": "Where the mask has 1s the network bits are kept; 0s are host bits.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "Which of these is <b>not</b> a valid IPv6 address?",
+      "options": [
+        "2001:db8::85a3::7334",
+        "2001:db8:85a3::8a2e:370:7334",
+        "::1",
+        "fe80::1"
+      ],
+      "explanation": "The double colon may appear only once; otherwise the number of zero hextets is ambiguous.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "What is the standard IPv6 subnet prefix length required for SLAAC?",
+      "options": [
+        "/64",
+        "/48",
+        "/96",
+        "/128"
+      ],
+      "explanation": "64 network bits plus a 64-bit Interface ID.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "How is an EUI-64 Interface ID built from a 48-bit MAC?",
+      "options": [
+        "Split the MAC in half, insert FFFE, flip the U/L bit",
+        "Append 16 zero bits",
+        "Hash the MAC with SHA-1",
+        "Copy the IPv4 address"
+      ],
+      "explanation": "24 + 16 (FFFE) + 24 = 64 bits, with the U/L bit inverted.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "How does IPv6 replace IPv4 broadcast?",
+      "options": [
+        "Targeted multicast (plus unicast and anycast)",
+        "Larger broadcast domains",
+        "ARP",
+        "NAT"
+      ],
+      "explanation": "IPv6 has no broadcast; multicast groups let only relevant hosts process discovery traffic.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "In CIDR notation, what does /24 mean?",
+      "options": [
+        "The first 24 bits are the network portion",
+        "There are 24 hosts",
+        "There are 24 subnets",
+        "The mask has 24 zero bits"
+      ],
+      "explanation": "/24 is 255.255.255.0.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "L3 & IP",
+      "question": "Which private range does the module identify as the Class C private block?",
+      "options": [
+        "192.168.0.0 to 192.168.255.255",
+        "10.0.0.0 to 10.255.255.255",
+        "169.254.0.0 to 169.254.255.255",
+        "127.0.0.0 to 127.255.255.255"
+      ],
+      "explanation": "Private addresses are for internal LANs and are not routable on the Internet without NAT.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "L3 & IP",
+      "question": "True or False: Private IP addresses like 192.168.x.x are directly routable on the public Internet without NAT.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "RFC 1918 private addresses are strictly for internal LAN use. An ISP router receiving a packet with a private source IP drops it instantly, which is why NAT/PAT exists.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "With h host bits, the number of usable hosts is:",
+      "options": [
+        "2<sup>h</sup> &minus; 2",
+        "2<sup>h</sup>",
+        "2<sup>h</sup> + 2",
+        "2<sup>h&minus;1</sup>"
+      ],
+      "explanation": "Subtract the Network ID and the Broadcast ID.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "Which statement about a subnet's Network ID and Broadcast ID is correct?",
+      "options": [
+        "Network ID = host bits all 0; Broadcast ID = host bits all 1; neither can be assigned to a host",
+        "Network ID = host bits all 1; Broadcast ID = host bits all 0",
+        "Both can be assigned to hosts",
+        "Network ID is the default gateway"
+      ],
+      "explanation": "They are the lowest and highest addresses in the block and are reserved.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "How many usable hosts are in 192.168.1.0/24?",
+      "options": [
+        "254"
+      ],
+      "explanation": "2<sup>8</sup> &minus; 2 = 254 (.1 to .254).",
+      "show": "254"
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "In VLSM, in which order should you carve subnets?",
+      "options": [
+        "Largest requirement first, smallest last",
+        "Smallest first, largest last",
+        "Alphabetical by name",
+        "Random"
+      ],
+      "explanation": "Carving big blocks first keeps every block aligned on its boundary and avoids overlaps.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "A Front Desk needs 60 hosts. What is the best prefix?",
+      "options": [
+        "/26 (62 usable)",
+        "/27 (30 usable)",
+        "/25 (126 usable)",
+        "/24 (254 usable)"
+      ],
+      "explanation": "60 hosts need 6 host bits (2<sup>6</sup> &minus; 2 = 62), so 32 &minus; 6 = /26.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "What is the traditional minimum prefix that gives 2 usable hosts for a point-to-point WAN link?",
+      "options": [
+        "/30 (255.255.255.252)",
+        "/29 (255.255.255.248)",
+        "/28 (255.255.255.240)",
+        "/24 (255.255.255.0)"
+      ],
+      "explanation": "2 host bits give 4 addresses, minus Network and Broadcast = 2 usable.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "What is the dotted-decimal mask for /27?",
+      "options": [
+        "255.255.255.224"
+      ],
+      "explanation": "27 network bits leave 5 host bits: 256 &minus; 32 = 224.",
+      "show": "255.255.255.224"
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "What is the dotted-decimal mask for /26?",
+      "options": [
+        "255.255.255.192"
+      ],
+      "explanation": "256 &minus; 64 = 192.",
+      "show": "255.255.255.192"
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "What is the dotted-decimal mask for /28?",
+      "options": [
+        "255.255.255.240"
+      ],
+      "explanation": "256 &minus; 16 = 240.",
+      "show": "255.255.255.240"
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "How many usable hosts are in a /28?",
+      "options": [
+        "14"
+      ],
+      "explanation": "4 host bits: 2<sup>4</sup> &minus; 2 = 14.",
+      "show": "14"
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "What is the broadcast address of 192.168.4.96/28?",
+      "options": [
+        "192.168.4.111"
+      ],
+      "explanation": "A /28 block is 16 addresses: .96 to .111. Network ID .96, usable .97 to .110, broadcast .111.",
+      "show": "192.168.4.111"
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "Storage (25 hosts) is placed at 192.168.4.64 after a /26 at .0. Which allocation is correct?",
+      "options": [
+        "192.168.4.64/27, hosts .65 to .94, broadcast .95",
+        "192.168.4.64/27, hosts .65 to .126, broadcast .127",
+        "192.168.4.64/26, hosts .65 to .94, broadcast .95",
+        "192.168.4.64/28, hosts .65 to .78, broadcast .79"
+      ],
+      "explanation": "25 hosts need 5 host bits (30 usable) = /27 = 32 addresses: .64 to .95. The .126/.127 values belong to a /26.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "After 192.168.4.0/26 and 192.168.4.64/27, where does the next free block start for a /30 WAN link?",
+      "options": [
+        "192.168.4.96 (hosts .97 and .98, broadcast .99)",
+        "192.168.4.95",
+        "192.168.4.128",
+        "192.168.4.100"
+      ],
+      "explanation": "The next Network ID starts right after the previous broadcast (.95). Starting at .128 is legal but leaves an unused gap.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "Why does a /31 work on a router-to-router link (RFC 3021)?",
+      "options": [
+        "Only two devices exist, so no Network/Broadcast address is reserved and both addresses are assigned",
+        "It has two usable addresses plus a Network and Broadcast ID",
+        "It uses NAT",
+        "Routers ignore masks on serial links"
+      ],
+      "explanation": "Broadcast is meaningless on a two-node link, so the OS disables it.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Subnetting",
+      "question": "Why do you usually see 255.255.255.0 on your own PC?",
+      "options": [
+        "It is the default for consumer routers and office LANs: 254 usable hosts and a manageable broadcast domain",
+        "The IEEE requires it",
+        "IPv4 only supports /24",
+        "DHCP forces it"
+      ],
+      "explanation": "Enterprises use custom masks (VLSM) to avoid waste.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Subnetting",
+      "question": "A router-to-router link uses a default /24. How many addresses are wasted (usable but unused)?",
+      "options": [
+        "252"
+      ],
+      "explanation": "254 usable minus the 2 needed = 252.",
+      "show": "252"
+    },
+    {
+      "type": "tf",
+      "category": "Subnetting",
+      "question": "True or False: A /31 subnet mask is valid on a point-to-point router link under RFC 3021.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "A /31 leaves only 1 host bit (2 addresses). RFC 3021 disables broadcast logic for two-device serial links so both .0 and .1 can be assigned as usable router interfaces.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "match",
+      "category": "Subnetting",
+      "question": "Match each CIDR prefix to its dotted-decimal subnet mask.",
+      "pairs": [
+        [
+          "/24",
+          "255.255.255.0"
+        ],
+        [
+          "/26",
+          "255.255.255.192"
+        ],
+        [
+          "/27",
+          "255.255.255.224"
+        ],
+        [
+          "/30",
+          "255.255.255.252"
+        ]
+      ],
+      "explanation": "Each step doubles the number of network bits' worth of blocks: /24 has 256 addresses per block, /26 has 64, /27 has 32, /30 has 4."
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "What is the maximum length of an Ethernet copper channel?",
+      "options": [
+        "100 m (328 ft)",
+        "55 m",
+        "300 m",
+        "30 m"
+      ],
+      "explanation": "Beyond 100 m, attenuation degrades the signal.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "What is Cat6's maximum distance at 10 Gbps?",
+      "options": [
+        "55 m",
+        "100 m",
+        "30 m",
+        "300 m"
+      ],
+      "explanation": "Cat6 reaches 100 m only at 1 Gbps.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Which category delivers 10 Gbps over the full 100 m (500 MHz)?",
+      "options": [
+        "Cat6a",
+        "Cat6",
+        "Cat5e",
+        "Cat8"
+      ],
+      "explanation": "Cat6a has thicker insulation and tighter twists.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Cat8 is used for:",
+      "options": [
+        "40 Gbps, 30 m data-center switch-to-server links",
+        "Legacy 100 Mbps access ports",
+        "WAN backbones",
+        "Wi-Fi backhaul"
+      ],
+      "explanation": "Cat8 is heavily shielded and specialized: 2000 MHz, 30 m.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "UTP reduces crosstalk mainly by:",
+      "options": [
+        "Tightly twisted pairs whose opposing fields cancel out",
+        "Foil shielding",
+        "A fiber core",
+        "Grounding"
+      ],
+      "explanation": "Destructive interference between twisted transmit and receive wires; higher categories twist more per inch.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Why must STP cabling be grounded at the patch panel?",
+      "options": [
+        "Without a ground, the shield acts as an antenna that traps EMI",
+        "To provide PoE",
+        "To extend the range",
+        "To change the pinout"
+      ],
+      "explanation": "An ungrounded shield collects ambient EMI and destroys data integrity.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Pins 1 and 2 of T568B are:",
+      "options": [
+        "White/Orange, Orange",
+        "White/Green, Green",
+        "White/Blue, Blue",
+        "White/Brown, Brown"
+      ],
+      "explanation": "T568A starts with White/Green, Green.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Which cable has T568A on one end and T568B on the other?",
+      "options": [
+        "Crossover",
+        "Straight-through",
+        "Rollover",
+        "Fiber patch cord"
+      ],
+      "explanation": "Crossovers connect like devices; Auto-MDIX makes them largely obsolete.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Which tool seats wires into a patch panel or keystone jack?",
+      "options": [
+        "Punch-down tool",
+        "Crimping tool",
+        "Wire stripper",
+        "Cable tester"
+      ],
+      "explanation": "A crimper secures the RJ-45 connector; the stripper removes the jacket.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "What is the core diameter of single-mode fiber?",
+      "options": [
+        "About 9 microns",
+        "50 microns",
+        "62.5 microns",
+        "About 1 mm"
+      ],
+      "explanation": "The narrow core allows a single light path: zero modal dispersion.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Why does multi-mode fiber have a shorter reach than single-mode?",
+      "options": [
+        "Modal dispersion smears the signal over distance",
+        "EMI affects it",
+        "It uses electrical signals",
+        "It has thicker jackets"
+      ],
+      "explanation": "Light rays at different angles arrive at different times.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "A switch port is hard-coded to full duplex but the endpoint fell back to half duplex. What does the CLI show?",
+      "options": [
+        "Skyrocketing late collisions",
+        "TTL Exceeded",
+        "ARP timeouts",
+        "No link light"
+      ],
+      "explanation": "The full-duplex side transmits while the half-duplex side is transmitting, causing logical collisions.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "Intermittent drops and high CRC errors appear after pairs were untwisted too far at a keystone jack. This is:",
+      "options": [
+        "Near-End Crosstalk (NEXT)",
+        "Attenuation",
+        "Duplex mismatch",
+        "MAC flapping"
+      ],
+      "explanation": "Untwisting changes impedance and causes signal reflections.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Physical",
+      "question": "A copper run exceeds 100 m. Which pitfall results?",
+      "options": [
+        "Attenuation",
+        "NEXT",
+        "Duplex mismatch",
+        "Modal dispersion"
+      ],
+      "explanation": "Signal voltage falls below the NIC's detection threshold: dead link or heavy loss.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "Physical",
+      "question": "True or False: Standard Ethernet over copper is limited to 100 meters per channel.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "Beyond 100 m (328 ft), signal attenuation drops the voltage below the NIC's detection threshold.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "Physical",
+      "question": "True or False: Multi-mode fiber has zero modal dispersion, giving it the longest reach.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "It is the opposite: single-mode fiber's narrow ~9-micron core gives zero modal dispersion and long-haul reach. Multi-mode has high modal dispersion, which limits it to short-haul LAN runs.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Physical",
+      "question": "Type the two-word tool used to remove a cable's outer jacket without nicking the copper conductors.",
+      "options": [
+        "wire stripper"
+      ],
+      "explanation": "A wire stripper removes the jacket cleanly; the crimping tool then secures the RJ-45 connector, and a punch-down tool seats wires into a patch panel or keystone jack.",
+      "show": "wire stripper"
+    },
+    {
+      "type": "match",
+      "category": "Physical",
+      "question": "Match each copper category to its top speed and maximum reach.",
+      "pairs": [
+        [
+          "Cat5e",
+          "1 Gbps over 100 meters"
+        ],
+        [
+          "Cat6",
+          "10 Gbps over 55 meters"
+        ],
+        [
+          "Cat6a",
+          "10 Gbps over the full 100 meters"
+        ],
+        [
+          "Cat8",
+          "40 Gbps over 30 meters"
+        ]
+      ],
+      "explanation": "Cat6 needs a plastic spline to cut crosstalk but still falls back to 55 m at 10 Gbps; Cat6a's thicker insulation and tighter twists let it hold 10 Gbps for the full 100 m; Cat8 is a short, heavily shielded data-center standard."
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "A PC pings 8.8.8.8. What is the destination MAC of the first frame?",
+      "options": [
+        "The default gateway's MAC",
+        "Google's MAC",
+        "FF:FF:FF:FF:FF:FF",
+        "The ISP router's MAC"
+      ],
+      "explanation": "The frame goes to the gateway; only the IP destination is 8.8.8.8.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "Ignoring NAT, what stays unchanged end to end?",
+      "options": [
+        "Source and destination IP addresses",
+        "Source and destination MAC addresses",
+        "The FCS",
+        "The VLAN tag"
+      ],
+      "explanation": "L2 headers are stripped and rewritten at every router hop.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Routing & NAT",
+      "question": "A packet leaves the host with TTL 64. After the first router it has TTL ___.",
+      "options": [
+        "63"
+      ],
+      "explanation": "Each router decrements TTL by 1.",
+      "show": "63"
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "What is the notation of the default route?",
+      "options": [
+        "0.0.0.0/0",
+        "255.255.255.255/32",
+        "127.0.0.0/8",
+        "169.254.0.0/16"
+      ],
+      "explanation": "It matches everything and is used when no more specific route exists.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "Why is NAT/PAT required for 192.168.1.50 to reach the Internet?",
+      "options": [
+        "RFC 1918 private addresses are not routable on the public Internet",
+        "Private addresses are IPv6",
+        "ISPs block TCP",
+        "MAC addresses cannot cross routers"
+      ],
+      "explanation": "An ISP router drops packets with a private source IP.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "How does PAT match an inbound reply to the correct LAN host?",
+      "options": [
+        "Layer 4 ports recorded in a NAT state table",
+        "MAC addresses",
+        "TTL values",
+        "DHCP leases"
+      ],
+      "explanation": "E.g. \"port 55555 belongs to 192.168.1.50.\"",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "Which device forms the boundary of a broadcast domain?",
+      "options": [
+        "Router",
+        "Switch",
+        "Hub",
+        "Repeater"
+      ],
+      "explanation": "Routers block broadcasts.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "Which pairing of device and core table is correct?",
+      "options": [
+        "Switch: CAM table; Router: routing table",
+        "Switch: routing table; Router: CAM table",
+        "Both use a routing table",
+        "Both use a CAM table"
+      ],
+      "explanation": "The CAM table maps MACs to ports; the routing table maps destination networks to next hops.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Routing & NAT",
+      "question": "Why can't a PC just broadcast a MAC request for 8.8.8.8?",
+      "options": [
+        "It is off-subnet and routers block broadcasts, so the PC ARPs for the default gateway",
+        "8.8.8.8 has no MAC address",
+        "ARP only works for IPv6",
+        "Switches block ARP"
+      ],
+      "explanation": "The bitwise AND with the mask shows the destination is remote, so the gateway is used.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "Routing & NAT",
+      "question": "True or False: Across a multi-hop path (ignoring NAT), the Layer 3 IP addresses stay the same end to end while the Layer 2 MAC addresses are stripped and rewritten at every router hop.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "Each router deletes the inbound L2 frame, makes its routing decision from the untouched L3 IPs, and builds a brand-new L2 frame for the next hop.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "DHCP",
+      "question": "DORA stands for Discover, Offer, ______, Acknowledge.",
+      "options": [
+        "request"
+      ],
+      "explanation": "The client formally requests the offered address.",
+      "show": "request"
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "Which UDP ports does DHCP use?",
+      "options": [
+        "Server 67, client 68",
+        "Server 68, client 67",
+        "Server 53, client 67",
+        "Server 80, client 443"
+      ],
+      "explanation": "Discover: 68 to 67. Offer/ACK: 67 to 68.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "Which L3 addresses does a DHCP Discover use?",
+      "options": [
+        "Source 0.0.0.0 to destination 255.255.255.255",
+        "Source gateway to destination client",
+        "Source 169.254.x.x to destination server",
+        "Source client to destination server"
+      ],
+      "explanation": "The client has no IP yet, so it uses the unknown-source and limited-broadcast addresses.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "Why is the DHCP Request also broadcast?",
+      "options": [
+        "It tells the winning server \"I accept\" and tells losing servers to return their offered IPs",
+        "Because clients have no MAC",
+        "Because routers require it",
+        "Because ARP needs it"
+      ],
+      "explanation": "Multiple servers may have offered addresses.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "A client requests DHCP and no server answers. The OS self-assigns:",
+      "options": [
+        "An APIPA address (169.254.x.x)",
+        "192.168.0.1",
+        "10.0.0.1",
+        "0.0.0.0/0"
+      ],
+      "explanation": "APIPA allows local-link communication only; it is not routable.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "Which devices should use static IP addresses?",
+      "options": [
+        "Routers, switches, servers and printers",
+        "Phones, laptops and tablets",
+        "Only wireless devices",
+        "Only guest devices"
+      ],
+      "explanation": "Infrastructure must always be found at the same address; end-user devices are transient.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "DHCP",
+      "question": "Type the Cisco command (base form) that relays DHCP broadcasts to a central server.",
+      "options": [
+        "ip helper-address*"
+      ],
+      "explanation": "Full form: <code>ip helper-address 10.0.99.5</code>, applied on the client-facing interface.",
+      "show": "ip helper-address"
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "On which interface do you configure <code>ip helper-address</code>?",
+      "options": [
+        "The interface facing the clients",
+        "The interface facing the server",
+        "Global config only",
+        "Line vty"
+      ],
+      "explanation": "The router intercepts the client broadcast there and forwards it as a unicast.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "What is the purpose of the giaddr field?",
+      "options": [
+        "It tells the remote server which subnet/pool the request came from",
+        "It holds the client's MAC",
+        "It sets the lease time",
+        "It lists the DNS server"
+      ],
+      "explanation": "The relay inserts its client-facing interface IP, e.g. 192.168.10.1.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "At 50% of the lease (T1) the client:",
+      "options": [
+        "Unicasts a DHCP Request to its original server to renew",
+        "Broadcasts a Discover",
+        "Releases the IP",
+        "Assigns an APIPA address"
+      ],
+      "explanation": "A successful renewal resets the timer.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "At 87.5% (T2), with the original server unreachable, the client:",
+      "options": [
+        "Broadcasts a DHCP Request to any server (rebinding)",
+        "Unicasts to the same server again",
+        "Gives up immediately",
+        "Reboots"
+      ],
+      "explanation": "If this fails and the lease reaches 100%, the client must surrender the IP.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "Which command must be entered <i>before</i> creating the DHCP pool?",
+      "options": [
+        "ip dhcp excluded-address",
+        "network",
+        "default-router",
+        "dns-server"
+      ],
+      "explanation": "Exclude the gateway, switches, servers and printers first so the router never leases them.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "How does a Cisco router detect that a rogue device already uses an IP?",
+      "options": [
+        "It pings the address before offering it; a reply flags a conflict",
+        "It checks the CAM table",
+        "It reads DNS",
+        "It uses STP"
+      ],
+      "explanation": "Flagged addresses appear in <code>show ip dhcp conflict</code>.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "DHCP",
+      "question": "Type the command that shows leased IPs with the client MAC and lease expiry.",
+      "options": [
+        "show ip dhcp binding"
+      ],
+      "explanation": "<code>show ip dhcp pool</code> shows scope utilization instead.",
+      "show": "show ip dhcp binding"
+    },
+    {
+      "type": "mc",
+      "category": "DHCP",
+      "question": "Why run DHCP on a branch router instead of only in the data center?",
+      "options": [
+        "Local clients still get IPs if the WAN to the data center drops",
+        "Routers are faster than servers",
+        "DHCP requires it",
+        "It replaces DNS"
+      ],
+      "explanation": "It also removes a single point of failure and reduces infrastructure.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "DHCP",
+      "question": "True or False: DORA stands for Discover, Offer, Request, Acknowledge.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "The client starts with no IP, so all four steps rely on Layer 2 MAC broadcasts and Layer 3 IP broadcasts until the lease is finalized.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "DHCP",
+      "question": "True or False: The client's DHCP Request in the DORA process is sent as a unicast directly to the winning server.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "It is broadcast. That single broadcast both tells the winning server \"I accept\" and tells any other servers that made offers to return those IPs to their pools.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "DHCP",
+      "question": "True or False: An APIPA address (169.254.x.x) is routable across the Internet.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "APIPA is a link-local fallback the OS self-assigns when no DHCP server answers. It allows only local Layer 2 communication on the same switch, never Internet routing.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "match",
+      "category": "DHCP",
+      "question": "Match each DORA phase to what happens during it.",
+      "pairs": [
+        [
+          "Discover",
+          "Client broadcasts, looking for any available DHCP server"
+        ],
+        [
+          "Offer",
+          "A server reserves an IP from its pool and proposes it"
+        ],
+        [
+          "Request",
+          "Client broadcasts acceptance of one specific offer"
+        ],
+        [
+          "Acknowledge",
+          "Server finalizes the lease: IP, mask, gateway, duration"
+        ]
+      ],
+      "explanation": "Because the client has no IP yet, Discover and Request both travel as Layer 2 and Layer 3 broadcasts; Offer and Acknowledge come from the server on UDP port 67 to client port 68."
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "Which prompt indicates Privileged EXEC mode?",
+      "options": [
+        "Router#",
+        "Router>",
+        "Router(config)#",
+        "Router(config-if)#"
+      ],
+      "explanation": "<code>&gt;</code> is User EXEC; <code>#</code> is Privileged EXEC.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Cisco IOS",
+      "question": "Type the command to move from User EXEC to Privileged EXEC.",
+      "options": [
+        "enable",
+        "en"
+      ],
+      "explanation": "Then <code>configure terminal</code> enters Global Configuration.",
+      "show": "enable"
+    },
+    {
+      "type": "fb",
+      "category": "Cisco IOS",
+      "question": "Type a command that saves the running configuration to NVRAM.",
+      "options": [
+        "copy running-config startup-config",
+        "copy run start",
+        "write memory",
+        "write",
+        "wr"
+      ],
+      "explanation": "Run it from Privileged EXEC. RAM is volatile; a reboot wipes unsaved changes.",
+      "show": "copy running-config startup-config"
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "Where is the startup configuration stored?",
+      "options": [
+        "NVRAM",
+        "RAM",
+        "The console buffer",
+        "The ARP cache"
+      ],
+      "explanation": "The running configuration is in volatile RAM.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "What does <code>do show ip route</code> allow inside <code>config-if</code> mode?",
+      "options": [
+        "Running a Privileged EXEC command without leaving the sub-mode",
+        "Deleting a route",
+        "Saving the config",
+        "Entering User EXEC"
+      ],
+      "explanation": "The <code>do</code> override executes EXEC commands from any config mode.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "What does <code>no shutdown</code> do on an interface?",
+      "options": [
+        "Brings the physical interface up",
+        "Deletes the IP address",
+        "Enables DHCP",
+        "Saves the config"
+      ],
+      "explanation": "Router interfaces are administratively down by default.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "Which sequence secures the console port?",
+      "options": [
+        "line con 0, then password, then login",
+        "interface con 0, then enable secret",
+        "line vty 0 4, then shutdown",
+        "service console"
+      ],
+      "explanation": "<code>login</code> forces the password prompt.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "Which statement about <code>enable secret</code> and <code>service password-encryption</code> is most accurate?",
+      "options": [
+        "enable secret stores a hash; service password-encryption applies only weak, reversible (Type 7) encryption to plaintext passwords",
+        "Both use strong AES encryption",
+        "They are identical",
+        "service password-encryption hashes with SHA-256"
+      ],
+      "explanation": "Type 7 is easily reversed, so it only defeats casual shoulder-surfing.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "Packet Tracer is best described as a:",
+      "options": [
+        "Simulator that mimics IOS behavior",
+        "Emulator running real IOS binaries",
+        "Hypervisor",
+        "Physical lab kit"
+      ],
+      "explanation": "It cannot reproduce obscure software bugs or hardware quirks.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "GNS3, EVE-NG and Cisco CML are:",
+      "options": [
+        "Emulators that boot real Cisco IOS images",
+        "Simulators that fake commands",
+        "Physical switches",
+        "Cable testers"
+      ],
+      "explanation": "They use hypervisors like QEMU to run the same binaries as physical hardware.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "What does Simulation mode in Packet Tracer let you do?",
+      "options": [
+        "Pause time and inspect each PDU at every OSI layer",
+        "Run real IOS binaries",
+        "Flash firmware",
+        "Bypass the CLI"
+      ],
+      "explanation": "You can watch the router strip and rewrite the L2 header while L3 IPs stay the same.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "In Packet Tracer the first ping shows \"Request timed out\" and the next three succeed. Why?",
+      "options": [
+        "The first echo is lost while ARP resolves the destination MAC; then it is cached",
+        "TTL expired",
+        "The DHCP lease was renewing",
+        "STP was converging"
+      ],
+      "explanation": "After the ARP reply, the MAC is cached and pings 2, 3 and 4 succeed instantly.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Cisco IOS",
+      "question": "Which cable connects a PC's FastEthernet port to a switch port?",
+      "options": [
+        "Straight-through",
+        "Crossover",
+        "Rollover (console)",
+        "Fiber"
+      ],
+      "explanation": "Different device types use straight-through cables (Auto-MDIX handles the rest on modern gear).",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "Cisco IOS",
+      "question": "True or False: Cisco Packet Tracer runs the same real IOS binaries used on physical hardware.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "Packet Tracer is a simulator that mimics IOS behavior from a programmed database; it is GNS3, EVE-NG, and Cisco CML that use hypervisors to boot real IOS binary images.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "match",
+      "category": "Cisco IOS",
+      "question": "Match each Cisco IOS prompt to its configuration mode.",
+      "pairs": [
+        [
+          "Router>",
+          "User EXEC"
+        ],
+        [
+          "Router#",
+          "Privileged EXEC"
+        ],
+        [
+          "Router(config)#",
+          "Global Configuration"
+        ],
+        [
+          "Router(config-if)#",
+          "Interface Configuration"
+        ]
+      ],
+      "explanation": "User EXEC is \"look but don't touch\"; Privileged EXEC is entered with enable; Global Configuration is entered with configure terminal; Interface mode is entered with interface followed by the interface name."
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "Do 802.1Q VLAN tags and CoS bits survive a routed hop?",
+      "options": [
+        "No: the router strips the L2 header; map CoS to DSCP in the IP header for end-to-end QoS",
+        "Yes, unchanged",
+        "Yes, but only on trunk links",
+        "Only if DF = 1"
+      ],
+      "explanation": "Downstream routers read DSCP and apply local queuing priorities.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "A packet exceeds the path MTU with DF = 1. What happens?",
+      "options": [
+        "The router drops it and returns ICMP Type 3, Code 4 with the next-hop MTU",
+        "The router fragments it anyway",
+        "The router forwards it with TTL 0",
+        "The router sends a TCP RST"
+      ],
+      "explanation": "This is the basis of Path MTU Discovery; the source shrinks its TCP MSS.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "Why does IP use TTL <i>and</i> routing loop prevention?",
+      "options": [
+        "Loop prevention protects the control plane; TTL is the data plane fail-safe if a loop forms anyway",
+        "They are redundant",
+        "TTL prevents ARP loops only",
+        "TTL is used only by BGP"
+      ],
+      "explanation": "Convergence delays or bad static routes can still create real loops.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "Dynamic ARP Inspection decides whether an ARP packet is legitimate using:",
+      "options": [
+        "The DHCP Snooping binding table",
+        "The routing table",
+        "TTL",
+        "The NAT table"
+      ],
+      "explanation": "A port/MAC/IP mismatch means the spoofed ARP is dropped in hardware.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "A packet is \"punted\" to the router's CPU when:",
+      "options": [
+        "Its destination is one of the router's own interface IPs or a control-plane multicast such as OSPF 224.0.0.5",
+        "It is any transit packet",
+        "Its TTL is 64",
+        "It is destined for 8.8.8.8"
+      ],
+      "explanation": "Transit packets are forwarded by the ASIC using the FIB.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "A host's default gateway is set to an ordinary PC's IP on the same subnet. What happens?",
+      "options": [
+        "Frames reach the PC, which drops them because IP forwarding is off: a black hole",
+        "The PC routes them to the Internet",
+        "The switch corrects the gateway",
+        "The host falls back to APIPA"
+      ],
+      "explanation": "The NIC accepts the frame but the OS discards the packet not addressed to itself.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "Two switches are cabled in a loop and one of them is unmanaged (no STP). What happens?",
+      "options": [
+        "Broadcasts loop and multiply until buffers overflow and the CPU locks up",
+        "Nothing; switches ignore loops",
+        "The frames are dropped after TTL reaches 0",
+        "DHCP fixes it"
+      ],
+      "explanation": "Layer 2 frames have no TTL. Managed switches use STP to block a port.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "How long does classic STP take to converge, compared to Rapid STP?",
+      "options": [
+        "About 30 to 50 seconds vs. about 2 seconds",
+        "About 2 seconds vs. 30 to 50 seconds",
+        "About 5 minutes vs. 30 seconds",
+        "Both are instant"
+      ],
+      "explanation": "Ports move through Blocking/Listening states before Forwarding.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "A TCP Window Size of 0 means:",
+      "options": [
+        "The receiver's buffer is full; the sender halts and sends zero-window probes",
+        "The connection is closed",
+        "The sender may send unlimited data",
+        "The MSS is 0"
+      ],
+      "explanation": "Transmission resumes when the receiver advertises a non-zero window.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "mc",
+      "category": "Gray Areas",
+      "question": "Host A is 192.168.1.10/24 and Host B is 192.168.1.130/25 on the same switch. What is the core problem?",
+      "options": [
+        "They disagree about what is on-link, so B sends its replies via its default gateway (or has none) and traffic is asymmetric",
+        "The switch refuses different masks",
+        "ARP cannot be broadcast with a /25",
+        "The addresses are duplicates"
+      ],
+      "explanation": "ARP still works (replies are unicast to the requester); the failure is at Layer 3 return traffic.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "Gray Areas",
+      "question": "True or False: TTL and routing-loop-prevention protocols like AS-Path both protect the same plane: the control plane.",
+      "options": [
+        "False",
+        "True"
+      ],
+      "explanation": "They protect different planes. Loop-prevention mechanisms (Split Horizon, Poison Reverse, AS-Path) protect the control plane by stopping routers from building a looping map. TTL is the data-plane fail-safe: it kills a packet that is actually looping, regardless of what the control plane believes.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "tf",
+      "category": "Gray Areas",
+      "question": "True or False: A TCP Window Size of 0 tells the sender to stop transmitting until the receiver's buffer clears.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "explanation": "The sender halts and periodically sends 1-byte Zero Window Probes; once the receiver's CPU drains its backlog, it advertises a non-zero window and transmission resumes.",
+      "correctAnswer": 0
+    },
+    {
+      "type": "fb",
+      "category": "Gray Areas",
+      "question": "Type the acronym for the process that lets a TCP sender shrink its Maximum Segment Size after receiving an ICMP \"Fragmentation Needed\" message.",
+      "options": [
+        "pmtud",
+        "path mtu discovery"
+      ],
+      "explanation": "PMTUD is triggered by an ICMP Type 3, Code 4 message when a packet exceeds the path MTU with the Don't Fragment bit set.",
+      "show": "PMTUD"
+    },
+    {
+      "type": "match",
+      "category": "Gray Areas",
+      "question": "Match each scenario to the concept it illustrates.",
+      "pairs": [
+        [
+          "An SSH session terminates on the router's own interface IP",
+          "Control Plane processing (punted to the CPU)"
+        ],
+        [
+          "A packet is forwarded to a remote network at wire speed",
+          "Data Plane forwarding via the FIB"
+        ],
+        [
+          "A forged ARP reply claims to be the default gateway",
+          "ARP poisoning / man-in-the-middle"
+        ],
+        [
+          "A receiver advertises a buffer size of 0 to a fast sender",
+          "TCP Zero Windowing"
+        ]
+      ],
+      "explanation": "Data-plane traffic never touches the router's CPU; only traffic addressed to the router itself (or control-plane multicast like OSPF's 224.0.0.5) gets punted up for software processing."
+    }
+  ],
+  "lessons": [
+    {
+      "category": "OSI",
+      "title": "Welcome to Networking — What Problem Are We Solving?",
+      "text": "Before we talk about the OSI model, or IP addresses, or any of those things, we need to answer one question first: what problem does networking actually solve? Imagine you have two computers in the same room. You want to send a file from one to the other. How do you do that? You could use a USB drive, but that requires physically walking over. Networking exists to remove that physical limitation — it creates a system where data can travel automatically between any two machines, whether they are in the same room or on opposite sides of the planet. But to make that work reliably, every device on the planet needs to agree on a common set of rules. If your computer speaks one language and the server you are trying to reach speaks a completely different one, communication breaks down. These agreed-upon rules are called protocols. A protocol is simply a set of rules that defines how data should be formatted, transmitted, received, and acknowledged. Without protocols, the Internet would simply not exist. Everything we are about to learn — OSI, IP, TCP, subnetting — is all just different protocols working together."
+    },
+    {
+      "category": "OSI",
+      "title": "What is Encapsulation and What is a PDU?",
+      "text": "There is one concept you absolutely must understand before anything else makes sense: encapsulation. Think about how you mail a physical letter. You write your message on a piece of paper. Then you put it in an envelope. You write the recipient's address on the outside. Then the post office puts that envelope in a larger shipping bag with routing instructions. Then a truck carries the bag. Each layer adds its own wrapping with its own information, and the actual letter is buried in the middle. Networking works exactly the same way. When you send data across a network, each layer of the networking model takes the data it receives, adds its own header — its own set of instructions — and passes the whole thing down to the next layer. This process of adding headers is called encapsulation. Now, the word PDU stands for Protocol Data Unit. It is simply the technical name for the chunk of data at any given layer. Instead of saying \"the data at Layer 3\" every time, engineers use the specific PDU name for that layer. At Layer 4, the PDU is called a Segment if using TCP, or a Datagram if using UDP. At Layer 3, it is called a Packet. At Layer 2, it is called a Frame. At Layer 1, it is just raw Bits. Remember this — every time you hear the word \"frame,\" someone is talking about Layer 2. Every time you hear \"packet,\" that is Layer 3. These are not interchangeable."
+    },
+    {
+      "category": "OSI",
+      "title": "Why Was the OSI Model Created?",
+      "text": "In the early days of networking, every computer manufacturer — IBM, DEC, Honeywell — had their own proprietary networking system. An IBM computer could not talk to a DEC computer because they used completely different rules. The International Organization for Standardization, or ISO, recognized this problem in the late 1970s. They needed a universal blueprint that any vendor could follow. The result was the Open Systems Interconnection model, published in 1984, which we call the OSI model. The OSI model has seven layers, and each layer has one specific job. The critical insight is this: each layer only communicates with the layer directly above it and directly below it. Layer 3 does not need to know anything about how Layer 1 actually transmits bits over a wire — it just passes data down and trusts the lower layers to handle it. This separation is called abstraction, and it is why you can use the same HTTP website regardless of whether you are on a wired Ethernet connection, WiFi, or a mobile data connection. The upper layers are completely unaffected by what happens at the lower layers."
+    },
+    {
+      "category": "OSI",
+      "title": "Layer 1 — The Physical Layer: Bits on a Wire",
+      "text": "Layer 1 is the Physical layer. It is the very bottom of the OSI model, and its job is the simplest to describe but the most fundamental: it is responsible for transmitting raw bits — zeros and ones — from one device to another across a physical medium. Notice that word \"physical.\" Layer 1 is about hardware. It includes copper cables, fiber optic cables, wireless radio signals, and the actual electronic components that send and receive electrical or light signals. The PDU at Layer 1 is simply called Bits. There are no headers here. Layer 1 does not know what the bits mean — it does not care if it is sending a webpage, an email, or a video. It just puts bits on the wire. Common Layer 1 devices include hubs and repeaters. A hub is a completely dumb device. When it receives a signal on one port, it copies and blasts that signal out of every other port blindly. It has no intelligence. This is important because it means a hub creates a single collision domain — if two devices send data at the exact same time, the signals collide and corrupt each other. Layer 2 was invented to solve this problem."
+    },
+    {
+      "category": "OSI",
+      "title": "Layer 2 — The Data Link Layer: Talking to Your Neighbor",
+      "text": "Layer 2 is the Data Link layer. If Layer 1 is about getting bits onto a physical medium, Layer 2 is about making sure those bits get to the right device on the local network — the device sitting right next to you, connected to the same switch. Think of it like internal mail in a large office building. The mailroom does not send letters across the country — it only delivers mail between offices within the same building. That is exactly what Layer 2 does. To do this, Layer 2 uses hardware addresses called MAC addresses. MAC stands for Media Access Control. Every network interface card manufactured in the world has a unique MAC address burned into it at the factory. It is 48 bits long, written as six pairs of hexadecimal numbers. When your computer wants to send data to another device on the same local network, it encapsulates the data from Layer 3 into a Layer 2 Frame. This frame has two critical fields in its header: the Source MAC address — your own address — and the Destination MAC address — the address of the device you want to reach. The device that operates at Layer 2 is the Switch. A switch is intelligent. Unlike a hub, a switch learns which MAC address is connected to which port by reading the Source MAC of every incoming frame. It stores this information in a table called the CAM table, or Content Addressable Memory table. When a frame arrives, the switch looks up the Destination MAC in its CAM table and sends the frame only out of the correct port. This eliminates collisions because each port is its own isolated collision domain."
+    },
+    {
+      "category": "OSI",
+      "title": "Layer 3 — The Network Layer: Routing Across the World",
+      "text": "Layer 3 is the Network layer, and this is where things get dramatically more interesting. Layer 2 can only deliver a frame to another device on the same local network. But what if you want to send data to someone in another country? Layer 2 is useless for that — MAC addresses are not routable over long distances. Layer 3 solves this by introducing a second type of address: the IP address. IP stands for Internet Protocol. Unlike MAC addresses, which are hardware addresses tied to a specific network card, IP addresses are logical addresses — they are assigned by software and can be changed. More importantly, IP addresses carry information about what network a device belongs to, which allows routers to make intelligent forwarding decisions. The Layer 3 PDU is called a Packet. When your computer wants to send data to a server in another country, Layer 3 encapsulates the Layer 4 segment inside an IP Packet. This packet has a Source IP address and a Destination IP address in its header. The device that operates at Layer 3 is the Router. Routers connect different networks together. When a router receives a packet, it reads the Destination IP address and consults its Routing Table — a list of known networks and the best path to reach each one. The router then forwards the packet toward its destination. Here is the key insight: as a packet travels from your home to a server, it might pass through ten or twenty different routers. At each router, the Layer 2 frame is completely stripped and rebuilt with new MAC addresses for the next hop. But the Layer 3 packet — the Source and Destination IP — stays completely unchanged from start to finish."
+    },
+    {
+      "category": "OSI",
+      "title": "Layer 4 — The Transport Layer: How Reliable Do You Need This?",
+      "text": "Layer 4 is the Transport layer. By this point, we have bits on a wire, we have a way to address devices locally with MACs, and we have a way to route data globally with IPs. But we still have two unsolved problems. First, a server might be running many applications simultaneously — a web server, an email server, a file transfer server. When a packet arrives at the server, how does the operating system know which application the data belongs to? Second, networks are inherently unreliable. Packets can be dropped, reordered, or corrupted. How do we ensure reliable delivery? Layer 4 solves both of these problems. For the first problem, Layer 4 introduces Port Numbers. A port number is a 16-bit number ranging from 0 to 65535. When you connect to a web server, your computer connects to port 80 for HTTP or port 443 for HTTPS. The server uses the port number to direct your traffic to the correct application. For the second problem, Layer 4 offers two choices: TCP or UDP. TCP stands for Transmission Control Protocol. It is connection-oriented. Before any data is sent, TCP performs a three-way handshake — a SYN, SYN-ACK, ACK exchange — to establish a reliable connection. It numbers every segment, and the receiver must acknowledge receipt. If a segment is lost, TCP retransmits it. This is ideal for web browsing, file transfers, and email — anything where accuracy matters more than speed. UDP stands for User Datagram Protocol. It has no handshake, no acknowledgments, and no retransmission. It just sends data and hopes for the best. This is ideal for video calls, gaming, and streaming — situations where speed matters more than perfection, and a dropped frame is better than a delayed one."
+    },
+    {
+      "category": "OSI",
+      "title": "Layers 5, 6, and 7 — Session, Presentation, and Application",
+      "text": "The top three layers of the OSI model — Session, Presentation, and Application — are sometimes grouped together because in the modern world, applications often handle all three functions themselves rather than using separate protocols for each. Layer 5 is the Session layer. Its job is to establish, maintain, and terminate logical communication sessions between two computers. A session is basically a conversation. When you start a video call, the Session layer is responsible for setting up that call, keeping it running even if there are brief network hiccups, and cleanly ending the conversation when you hang up. It also handles checkpointing — if a large file transfer fails halfway through, the session layer can resume from the checkpoint rather than starting over. Layer 6 is the Presentation layer. Its job is translation and formatting. Different computers store data in different formats. The Presentation layer ensures that data sent by one system is readable by another. It also handles encryption — SSL and TLS encryption happen at this layer. And it handles compression to reduce the amount of data that needs to be transmitted. Layer 7 is the Application layer. This is the layer closest to the end user. It provides network services directly to the applications you use every day. HTTP for web browsing, DNS for converting website names into IP addresses, SMTP for email, and FTP for file transfers all operate at Layer 7. When you type a URL in your browser and hit enter, the Application layer is the first layer to be involved in generating the data that will eventually travel down through all the other layers."
+    },
+    {
+      "category": "L2 & Switching",
+      "title": "Understanding MAC Addresses in Depth",
+      "text": "We introduced MAC addresses briefly when talking about Layer 2. Now let's go deeper, because understanding the structure of a MAC address is critical for understanding how Layer 2 networks actually work. A MAC address is exactly 48 bits long — that is six bytes, typically written as six pairs of hexadecimal digits separated by colons or hyphens, for example: A4:C3:F0:85:AC:2D. The address is divided into two distinct halves. The first 24 bits — the first three pairs — are called the Organizationally Unique Identifier, or OUI. The IEEE assigns these OUI blocks to hardware manufacturers. So if you see a MAC address starting with A4:C3:F0, you can look that up and determine it was manufactured by Apple. This is actually how network scanning tools can identify devices on a network. The last 24 bits are the NIC-specific bits — a serial number uniquely assigned by the manufacturer to that specific network card. Together, the OUI plus the NIC serial number guarantees that every MAC address ever manufactured should be globally unique. There is also something important hidden in the first byte. Bit 0 of the first byte — called the Individual/Group bit — indicates whether the frame is a unicast, meaning destined for one specific device, or a multicast or broadcast, meaning destined for a group. When this bit is zero, it is unicast. When it is one, it is multicast. The all-ones broadcast address, which is FF:FF:FF:FF:FF:FF, has every single bit set to one, including this bit."
+    },
+    {
+      "category": "L2 & Switching",
+      "title": "How Switches Learn and Forward Frames",
+      "text": "Let's walk through exactly what happens inside a switch, step by step, from the moment you plug in your computer. When you first connect your computer to switch port 1, the switch knows nothing. Its CAM table is completely empty. You send the very first frame. The switch receives it on port 1. The first thing the switch does is read the Source MAC address from that frame and make a note: this MAC address is reachable through port 1. It writes this into the CAM table. Now the switch needs to forward the frame to its destination. It reads the Destination MAC address and looks it up in the CAM table. If the destination MAC is already in the table — because that device sent a frame earlier — the switch forwards the frame only out of the correct port. This is called known unicast forwarding, and it is efficient. But if the destination MAC is NOT in the table — because this is the very first frame this device has ever sent or the entry expired — the switch does something called Unknown Unicast Flooding. It copies the frame and sends it out of every single port except the port it came in on. Every device on the network receives this frame, but only the device with the matching MAC address will accept and process it. All others discard it. When the correct device responds, the switch learns its MAC address and port from the Source MAC of the response frame. From that point on, the switch can forward frames to that device efficiently. CAM table entries are not permanent — they have a default aging time of 300 seconds. If a device does not send any traffic for five minutes, its entry is removed."
+    },
+    {
+      "category": "L2 & Switching",
+      "title": "Collision Domains vs Broadcast Domains",
+      "text": "These two terms come up constantly in networking, and people often confuse them. Let us be very precise about what each one means. A collision domain is a group of devices that share the same physical medium, where two devices transmitting simultaneously would cause a collision. In the old days of hubs, every device connected to the hub was in the same collision domain. If Device A and Device B both sent a frame at the same moment, the electrical signals would collide and corrupt each other. Both devices would have to wait a random amount of time and try again. This was called CSMA/CD — Carrier Sense Multiple Access with Collision Detection. Switches completely solve the collision domain problem. Because a switch forwards frames only out of specific ports, each port on a switch is its own isolated collision domain. Device A and Device B can both send frames simultaneously without any collision, because the switch buffers and forwards each frame independently. A broadcast domain is a different concept. A broadcast domain is a group of devices that will all receive a Layer 2 broadcast frame — a frame with the destination MAC of FF:FF:FF:FF:FF:FF. Switches forward broadcast frames out of every port except the incoming port, just like unknown unicast flooding. This means all devices connected to a switch are in the same broadcast domain. To separate broadcast domains, you need a Router. Routers never forward Layer 2 broadcasts — they block them completely. Each router interface is a separate broadcast domain. This is why we use routers and VLANs to segment large networks — to prevent broadcast traffic from overwhelming every device."
+    },
+    {
+      "category": "Subnetting",
+      "title": "Binary Numbers — The Foundation of Everything",
+      "text": "Before you can understand IP addresses and subnetting, you must understand binary numbers. I know this sounds like math, but stay with me — this is the single most important building block of all networking. Computers do not naturally think in decimal, the base-ten number system we use every day with digits zero through nine. Computers think in binary — base two — using only two digits: zero and one. Each binary digit is called a bit. One bit can only represent two values: off, which is zero, or on, which is one. But when you group bits together, you can represent much larger numbers. With 8 bits — which is called one byte, or one octet — you can represent 256 different values: from zero all the way to 255. Let me show you how. Each bit position has a value that doubles as you go left. Starting from the right: bit 0 is worth 1. Bit 1 is worth 2. Bit 2 is worth 4. Bit 3 is worth 8. Bit 4 is worth 16. Bit 5 is worth 32. Bit 6 is worth 64. Bit 7 is worth 128. The total of all eight positions is 255. If all eight bits are set to one, you get 128 plus 64 plus 32 plus 16 plus 8 plus 4 plus 2 plus 1, which equals 255. If only the leftmost bit is set, you get 128. If only the two leftmost bits are set, you get 192. This binary math is exactly how subnet masks work. When you see the number 255.255.255.0 as a subnet mask, you are looking at 24 bits that are all set to one, followed by 8 bits that are all zero."
+    },
+    {
+      "category": "Subnetting",
+      "title": "What is an IP Address Really?",
+      "text": "Now that you understand binary, we can properly understand what an IP address is. An IPv4 address is a 32-bit binary number. That is it. 32 ones and zeros. For example, the IP address of Google's public DNS server — 8.8.8.8 — in binary is 00001000 dot 00001000 dot 00001000 dot 00001000. We never write it in binary because that is exhausting to read. Instead, we break the 32 bits into four groups of 8 bits — four octets — and convert each group to a decimal number, separated by dots. This is called dotted decimal notation. Each octet can range from 0 to 255, which is why you will never see an IP address with a number higher than 255 in any of the four positions. So an address like 192.168.1.100 is really just a convenient human-readable representation of a 32-bit binary number. There are exactly 2 to the power of 32 possible IPv4 addresses, which works out to about 4.3 billion. That sounds like a lot, but the world ran out of available IPv4 addresses many years ago. This is why we have private addressing and NAT, which we will discuss later, and why IPv6 was developed — using 128 bits instead of 32, giving us an almost incomprehensibly larger address space."
+    },
+    {
+      "category": "Subnetting",
+      "title": "Network Portion vs Host Portion — The Key to Everything",
+      "text": "Here is the concept at the heart of subnetting. Every IP address is divided into two parts: the Network portion and the Host portion. The Network portion identifies which network a device belongs to — think of it like a zip code. The Host portion identifies the specific device within that network — think of it like a house number within that zip code. Two devices can only communicate directly at Layer 2 if they have the same Network portion. If their network portions differ, they cannot communicate without going through a Router. So how does a device know where the Network portion ends and the Host portion begins? That is exactly what the Subnet Mask tells you. A subnet mask is also a 32-bit binary number, and it works like a stencil laid over an IP address. Wherever there is a 1 in the subnet mask, the corresponding bit in the IP address is part of the Network portion. Wherever there is a 0 in the subnet mask, the corresponding bit is part of the Host portion. And here is the critical rule: subnet masks must be contiguous — all the ones must come before all the zeros. You cannot have a one, a zero, and then another one. This means the network portion always occupies the left side of the address and the host portion always occupies the right side. When you see the slash notation, like slash 24 or slash 16, the number tells you how many consecutive 1s are in the subnet mask. Slash 24 means the first 24 bits are the network portion, leaving 8 bits for hosts. Slash 16 means the first 16 bits are the network portion, leaving 16 bits for hosts."
+    },
+    {
+      "category": "Subnetting",
+      "title": "Network ID, Broadcast Address, and Usable Hosts",
+      "text": "Every subnet has four key values you need to be able to calculate. Understanding these is the core skill of subnetting. The first is the Network ID, also called the Network Address. This is the very first address in the subnet — the address you get when you set all the host bits to zero. The Network ID is never assigned to any individual device. Routers use it to represent the entire subnet in routing tables. Think of it like the name of a neighborhood — the neighborhood has a name, but no one lives at the neighborhood itself. The second value is the Broadcast Address. This is the very last address in the subnet — you get it by setting all the host bits to one. When a device sends a packet to this address, every device in the subnet receives it. Like the Network ID, the Broadcast Address is never assigned to an individual device. The third and fourth values are the Usable Host Range — every address between the Network ID and the Broadcast Address. These are the addresses you actually assign to computers, printers, phones, and routers. The total number of usable hosts in any subnet is two to the power of h, minus two, where h is the number of host bits. We subtract two because of the Network ID and Broadcast Address. For a slash 24 network, you have 8 host bits, so 2 to the power of 8 is 256, minus 2 equals 254 usable hosts. For a slash 25, you have 7 host bits, giving you 126 usable hosts. For a slash 30 — which is the smallest commonly used subnet — you have 2 host bits, giving you exactly 2 usable hosts, which is perfect for a point-to-point link between two routers."
+    },
+    {
+      "category": "Subnetting",
+      "title": "Working Through a Subnetting Example",
+      "text": "Let us work through a complete subnetting example together so this becomes concrete. Suppose you are given the address 192.168.10.50 with a slash 26 subnet mask. Your job is to find the Network ID, the Broadcast Address, and the usable host range. First, let's understand what slash 26 means. It means 26 bits are the network portion, which leaves 6 bits for the host portion. Six host bits means 2 to the power of 6, which is 64. This is the block size — every subnet of this size contains 64 addresses. Now, to find which subnet our address falls into, we need to find the nearest multiple of 64 that does not exceed the host octet. Our address is 192.168.10.50. The last octet is 50. The multiples of 64 are: 0, 64, 128, and 192. 50 falls between 0 and 64, so the Network ID is 192.168.10.0. The Broadcast Address is always one less than the next subnet boundary. The next boundary would be 192.168.10.64, so the Broadcast Address is 192.168.10.63. The Usable Host Range is 192.168.10.1 through 192.168.10.62. That is 62 usable addresses. And our original address, 192.168.10.50, falls within this range, so it is a valid host address in this subnet. This pattern — find the block size, find the multiple of that block size just below your address, that is your Network ID — works for every subnetting problem you will ever encounter."
+    },
+    {
+      "category": "Subnetting",
+      "title": "The IPv4 Header and Time to Live",
+      "text": "When data travels across the Internet, it is wrapped inside an IP Packet. That packet has a header — a block of control information at the front — that routers use to make forwarding decisions. Let us walk through the most important fields in the IPv4 header. The Version field tells the router whether this is IPv4 or IPv6. The IHL field, or Internet Header Length, specifies how long the header is — usually 20 bytes, but it can be longer if options are present. The TTL field stands for Time to Live. This is one of the most important fields in the header. TTL is a number, typically starting at 64 or 128, and every single router that forwards the packet decrements this number by one. If the TTL reaches zero before the packet reaches its destination, the router discards the packet and sends an ICMP Time Exceeded message back to the source. The purpose of TTL is to prevent packets from looping forever in the event of a routing loop. Without TTL, a misrouted packet could bounce between routers indefinitely, consuming bandwidth. TTL is also what the ping and traceroute commands exploit — traceroute deliberately sends packets with increasing TTL values to map out each router hop along the path. The Protocol field tells the receiving device's Layer 3 process which Layer 4 protocol is encapsulated inside — a value of 6 means TCP, a value of 17 means UDP. The Source IP and Destination IP fields are the 32-bit addresses we discussed earlier. And finally, the Header Checksum allows the router to verify the integrity of the header itself."
+    },
+    {
+      "category": "Physical",
+      "title": "Copper Cable Standards and Why They Matter",
+      "text": "When we talk about the Physical layer in a real enterprise environment, the first decision an engineer makes is which cable type to use. For copper Ethernet cables, the standard is UTP — Unshielded Twisted Pair. The category rating of the cable tells you the maximum frequency it can handle and therefore the maximum speed it supports over a given distance. Category 5e, or Cat5e, is the baseline standard for Gigabit Ethernet. The letter e stands for enhanced. It supports one gigabit per second over the standard distance of 100 meters. The 100-meter limit is not arbitrary — it is based on signal degradation. Electrical signals weaken as they travel through copper. Beyond 100 meters, the signal becomes too weak to reliably distinguish a one from a zero, causing transmission errors. Category 6, or Cat6, uses a tighter twist rate and often includes a physical plastic divider called a spline running down the center of the cable to physically separate the wire pairs. This reduces a phenomenon called crosstalk — where the signal on one pair of wires induces unwanted interference on an adjacent pair. Cat6 supports 1 gigabit over 100 meters and can support 10 gigabits over shorter distances of up to 55 meters. Category 6a extends that 10 gigabit capability to the full 100 meter distance. The a stands for augmented. Cat6a has thicker insulation and a higher-performance design, which is why Cat6a cables are noticeably thicker and stiffer than Cat5e."
+    },
+    {
+      "category": "Physical",
+      "title": "Fiber Optics — Speed of Light Networking",
+      "text": "Fiber optic cable is fundamentally different from copper. Instead of carrying electrical signals, fiber carries pulses of light. This gives fiber several enormous advantages. First, light travels much faster than electrical signals in copper. Second, light is completely immune to electromagnetic interference — you can run fiber right next to high-voltage power cables without any signal degradation. Third, fiber can span vastly longer distances. There are two main types of fiber. Multi-Mode Fiber, or MMF, has a relatively wide core — typically 50 or 62.5 micrometers in diameter. LED or VCSEL light sources inject light at multiple angles into this wide core. The problem is that different light paths travel at slightly different speeds, causing the pulses to spread out over distance. This effect is called modal dispersion. Because of modal dispersion, multi-mode fiber is typically limited to distances of around 500 meters or less, though this depends on the speed. Multi-mode fiber is used for short-haul links within a building or between buildings on the same campus. Single-Mode Fiber, or SMF, has an extremely narrow core — just 9 micrometers. At this size, only a single ray of light can propagate through the core in a straight line, which is why it is called single-mode. With no modal dispersion, single-mode fiber can span extraordinary distances — from 10 kilometers up to 100 kilometers and beyond using high-powered laser light sources. Single-mode fiber is used for long-haul WAN connections, undersea cables, and any link where distance is the primary challenge."
+    },
+    {
+      "category": "Routing & NAT",
+      "title": "Switches vs Routers — Understanding the Fundamental Difference",
+      "text": "This is one of those foundational distinctions that every networking student needs to be crystal clear on. Switches and routers look similar — they are both boxes with a bunch of ports. But they operate at completely different layers of the OSI model and perform completely different functions. A switch is a Layer 2 device. It operates exclusively using MAC addresses. A switch has absolutely no concept of IP addresses, subnet masks, or routing. It only knows about devices on its own local network. When a switch receives a frame, it reads the destination MAC address, looks it up in its CAM table, and forwards the frame to the correct port. That is the full extent of what a switch can do. Think of it as an office mailroom — it can deliver mail between offices in the same building, but it has no idea how to send a package to another country. A router is a Layer 3 device. It operates using IP addresses. A router's job is to connect separate networks and determine the best path for a packet to travel from its source to its destination. When a router receives a packet, it strips off the Layer 2 frame entirely, reads the Layer 3 destination IP address, consults its routing table to determine the best next hop, and then creates a completely new Layer 2 frame to send the packet to the next router along the path. A router never forwards Layer 2 broadcasts — it is a broadcast domain boundary. Every interface on a router is a separate network."
+    },
+    {
+      "category": "Routing & NAT",
+      "title": "The Default Gateway — Your Exit Door",
+      "text": "When your computer wants to communicate with another device, the very first question it must answer is: is this device on my local network, or is it somewhere else? To answer this, your computer performs a bitwise AND operation between the destination IP address and its own subnet mask. If the result matches your own network address, the destination is local — you can reach it directly using ARP and Layer 2. If the result does NOT match your network address, the destination is remote — it is on a different network entirely. Here is the problem: your computer cannot reach remote networks on its own. Switches do not forward traffic between different networks. Your computer needs someone to hand the packet to — someone who knows how to route it further. That someone is the Default Gateway. The Default Gateway is the IP address of the router interface on your local network. It is the one address your computer knows it can always send packets to when it does not know how to reach a destination directly. Your computer sends the packet to the router's MAC address at Layer 2, but with the actual destination IP in the Layer 3 header. The router receives the packet, sees that the destination IP is not on the local network, looks up the best path in its routing table, and forwards the packet toward the real destination. Without a correctly configured default gateway, your computer can communicate with devices on its own subnet but cannot reach anything on the Internet."
+    },
+    {
+      "category": "Routing & NAT",
+      "title": "How a Packet Actually Travels Across the Internet",
+      "text": "Let us trace a packet from your computer at home all the way to a web server, step by step, because this is the most important concept in all of networking. You type a website address into your browser. DNS resolves it to an IP address — let's say 93.184.216.34. Your computer checks: is 93.184.216.34 on my local network? No — it is on a completely different network. So your computer wraps the data in a TCP segment with Destination Port 80 for HTTP. It wraps that in an IP packet with Source IP of your private address, say 192.168.1.100, and Destination IP of 93.184.216.34. Now your computer needs to build a Layer 2 frame to send this packet to your router. It uses ARP to find the MAC address of your router's interface. It builds a frame with Destination MAC equal to the router's MAC address. The router receives the frame. It sees the Destination MAC is its own address, so it accepts the frame and strips it. It reads the Destination IP: 93.184.216.34. It checks its routing table and determines the next hop. It builds a brand new Layer 2 frame — different source and destination MACs — and sends the packet to the next router. This process repeats at every router along the path. The IP addresses in the Layer 3 header never change — 192.168.1.100 to 93.184.216.34, all the way across the Internet. But the Layer 2 MAC addresses are completely replaced at every single hop. The reply from the server follows the same process in reverse. This is the fundamental mechanism of the Internet."
+    },
+    {
+      "category": "Routing & NAT",
+      "title": "Network Address Translation — One Public IP for Everyone",
+      "text": "We know that IPv4 addresses have run out. There are billions of devices on the Internet but only about 4.3 billion possible IPv4 addresses, and most of those are already allocated. So how does every phone, laptop, smart TV, and gaming console in your home have a connection to the Internet? The answer is Network Address Translation, or NAT — specifically Port Address Translation, or PAT. Your Internet service provider assigns your router a single public IP address — let's say 203.0.113.45. Every device in your home uses a private IP address from a range defined by RFC 1918: 192.168.0.0 through 192.168.255.255, or 10.0.0.0 through 10.255.255.255, or 172.16.0.0 through 172.31.255.255. These private addresses are never routed on the public Internet. When your computer sends a packet to Google, here is what happens at your router. The router intercepts the packet. It sees the Source IP is 192.168.1.100, port 54321. It replaces the Source IP with its own public IP — 203.0.113.45 — and assigns a new source port number. It records this mapping in a NAT translation table: internal 192.168.1.100:54321 corresponds to external 203.0.113.45:40001. Google's server receives the packet and sees it coming from 203.0.113.45. It sends its reply to 203.0.113.45. Your router receives the reply, looks up port 40001 in its translation table, and rewrites the Destination IP back to 192.168.1.100 before forwarding it to your computer. Your computer never knows this substitution happened. Through this mechanism, hundreds of devices can share a single public IP address simultaneously."
+    },
+    {
+      "category": "DHCP",
+      "title": "Why IP Addresses Cannot Just Be Random",
+      "text": "Before we learn how DHCP works, we need to understand why it exists. When a new device joins a network, it needs several pieces of information to communicate: an IP address that is unique — no two devices can share the same IP or they will conflict and break each other's connectivity. A subnet mask, so the device knows which addresses are local and which are remote. A default gateway, so the device knows where to send traffic destined for other networks. And DNS server addresses, so the device can resolve domain names. In the very early days of networking, a network administrator had to manually configure all of this on every single device. In a company with hundreds or thousands of computers, this was an enormous burden. And it was error-prone — if two administrators accidentally assigned the same IP address to two different computers, both would have connectivity problems and troubleshooting would be difficult. Dynamic Host Configuration Protocol — DHCP — was designed to automate this entire process. A centralized DHCP server maintains a pool of available IP addresses and configuration information. When a device joins the network, it automatically requests all the information it needs from the server. The server assigns a unique IP from the pool and provides all the other configuration parameters. The assignment is called a lease — it is temporary, and the device must renew it periodically. This way, when a laptop leaves the building and disconnects, its IP address eventually gets returned to the pool and can be assigned to a different device."
+    },
+    {
+      "category": "DHCP",
+      "title": "The DORA Process — How DHCP Really Works",
+      "text": "DHCP uses a four-step process called DORA, which stands for Discover, Offer, Request, and Acknowledge. Let us walk through each step carefully. Step one is Discover. When your laptop connects to a new network, it has no IP address. It cannot send a normal unicast packet because unicast requires knowing the source IP and destination IP. Instead, it sends a broadcast packet using the source IP 0.0.0.0 — meaning it has no address yet — and the destination IP 255.255.255.255, which is the limited broadcast address that every device on the local network will receive. This DHCP Discover message is basically your laptop shouting into the network: \"Is there a DHCP server here? I need an IP address!\" Step two is Offer. If a DHCP server hears this broadcast, it responds with a DHCP Offer. This offer contains a proposed IP address, the subnet mask, the default gateway, the DNS servers, and the lease duration. If there are multiple DHCP servers on the network, all of them may respond with different offers. Step three is Request. Your laptop receives one or more offers and picks one — typically the first one that arrived. It then broadcasts a DHCP Request message, saying: \"I would like to formally request the IP address offered by this specific server.\" It broadcasts this rather than unicasting back to the server because the other servers that sent offers also need to know their offers were not chosen, so they can return those addresses to their pools. Step four is Acknowledge. The chosen DHCP server sends a DHCP Acknowledge message, confirming the lease. Your laptop now has all the configuration it needs and can begin communicating on the network."
+    },
+    {
+      "category": "DHCP",
+      "title": "DHCP Relay Agents and Cisco Configuration",
+      "text": "There is a significant practical problem with the DORA process we just described. Step one — the Discover message — is a broadcast. And routers do not forward broadcasts. In a small office where the DHCP server is on the same network segment as all the clients, this works fine. But in an enterprise, you typically have one centralized DHCP server in a data center and dozens of separate office networks, each separated by routers. A client on the third floor cannot reach the DHCP server in the basement because the broadcast never makes it through the router. The solution is a DHCP Relay Agent, also called IP Helper. This is a feature configured directly on the router interface facing the clients. When the router interface receives a DHCP Discover broadcast, instead of discarding it, it pauses and transforms the broadcast. It takes the DHCP message, packages it into a unicast UDP packet with the DHCP server's specific IP address as the destination, and forwards it through the network. It also inserts its own IP address into the Gateway IP Address field of the DHCP message — called the giaddr field — so the server knows which subnet the client is on and which pool to assign from. When the server sends its Offer back, it sends it as a unicast to the relay agent's IP address, and the relay agent broadcasts the response onto the client's local network. For configuring a Cisco router as a DHCP server, you use the command \"ip dhcp pool\" to create a pool, define the network with the \"network\" command, set the default router with the \"default-router\" command, and configure DNS servers with the \"dns-server\" command. Always remember to use the \"ip dhcp excluded-address\" command first to reserve addresses for your router interface and any static devices, so they are not accidentally handed out to clients."
+    },
+    {
+      "category": "Cisco IOS",
+      "title": "Navigating the Cisco IOS Command Line",
+      "text": "Cisco routers and switches run an operating system called IOS — the Internetwork Operating System. The interface is entirely command-line based — there is no graphical user interface for configuration. When you first connect to a Cisco device, you are placed in User EXEC mode. You can tell you are in User EXEC mode because the prompt ends with a greater-than sign, like Router>. In this mode, you can only run basic display commands. You cannot make any configuration changes. To gain full access, you type \"enable\" — or just \"en\" — to enter Privileged EXEC mode. In Privileged EXEC mode, the prompt ends with a hashtag symbol, like Router#. From here you can view everything about the device using \"show\" commands. \"show running-config\" displays the current active configuration. \"show interfaces\" shows the status of all interfaces. \"show ip route\" displays the routing table. But still, from Privileged EXEC mode, you cannot make configuration changes. To actually configure the device, you type \"configure terminal\" — or \"conf t\" — to enter Global Configuration mode. The prompt changes to Router(config)#. From here, commands you type affect the entire device globally — like configuring hostname, setting passwords, or enabling routing protocols. From Global Config, you can enter sub-configuration modes that affect specific components. Typing \"interface GigabitEthernet0/0\" takes you to Router(config-if)#, where commands affect only that specific interface. \"router ospf 1\" takes you to Router(config-router)# for configuring a routing protocol. Use \"exit\" to go back up one level, or \"end\" to jump all the way back to Privileged EXEC mode."
+    },
+    {
+      "category": "Cisco IOS",
+      "title": "Packet Tracer and Practical Lab Skills",
+      "text": "Understanding the theory of networking is essential, but you will not truly internalize it until you practice on actual devices or a simulator. Cisco Packet Tracer is the industry-standard free simulation tool for CCNA preparation. It is important to understand what Packet Tracer is and what it is not. Packet Tracer is a simulator. It does not run actual Cisco IOS code. Instead, it is a program engineered to mimic the behavior of network protocols. It faithfully replicates CCNA-level commands and protocol behaviors. You can build multi-router topologies, configure DHCP, set up routing protocols, verify connectivity with ping and traceroute, and even see visual animations of packets traveling through the network. However, Packet Tracer cannot replicate every IOS feature or every edge case behavior, because it is mimicking rather than executing real code. For more advanced work, tools like GNS3 or EVE-NG actually download and run real Cisco IOS images inside virtual machines, giving you a genuine router experience. When practicing in Packet Tracer, always start every lab by verifying your physical connections — a red dot on a link means no connectivity at Layer 1. Then verify Layer 2 — use \"show mac address-table\" on switches. Then verify Layer 3 — use \"show ip route\" on routers and check that all expected networks appear in the table. This systematic bottom-up troubleshooting approach — starting at Layer 1 and working up — is the professional method used by network engineers worldwide."
+    },
+    {
+      "category": "Gray Areas",
+      "title": "Why Layer 2 Headers Are Rewritten at Every Hop",
+      "text": "This is one of the most common points of confusion for networking students, so let us make it absolutely clear. When a packet travels from your home computer to a web server across the Internet, it might pass through fifteen different routers. At every single router, the Layer 2 Ethernet frame is completely destroyed and a brand new one is built. But the Layer 3 IP packet inside — with your original source IP and the server's destination IP — is never touched by any router along the path. Why does this happen? Because Layer 2 addresses — MAC addresses — only have meaning on the local network segment. A MAC address is a flat address with no hierarchical structure, no concept of distance, no routing capability. It is designed to identify a device on the wire directly in front of you. When your packet leaves your home router and enters your ISP's network, your home router's MAC address is completely irrelevant. The ISP's routers only care about the IP address to determine where to forward the packet next. Each new link in the path — each new router-to-router connection — is its own separate Layer 2 domain with its own MAC addresses. So the router strips the old frame, reads the IP address, builds a new frame addressed to the next router's MAC address, and sends it. This process repeats until the packet reaches the destination network, at which point the final router builds a frame addressed to the destination device's actual MAC address."
+    },
+    {
+      "category": "Gray Areas",
+      "title": "ARP — The Bridge Between Layer 2 and Layer 3",
+      "text": "We have talked about MAC addresses and IP addresses as separate things, but in practice, a crucial question arises: if your computer knows the IP address of a device it wants to reach, how does it find out that device's MAC address so it can build a Layer 2 frame? The answer is ARP — the Address Resolution Protocol. ARP is one of those foundational protocols that runs silently in the background, and most people who use computers every day have no idea it exists. Here is how it works. Your computer wants to send data to 192.168.1.1, which is your router. It checks its ARP cache — a local table mapping IP addresses to MAC addresses. If 192.168.1.1 is already in the ARP cache with its MAC address, your computer uses that MAC address to build the frame. If the entry is not in the cache, your computer sends an ARP Request. This is a broadcast frame — Destination MAC is FF:FF:FF:FF:FF:FF — that every device on the local network receives. The ARP Request says: \"Who has IP address 192.168.1.1? Tell 192.168.1.100.\" Every device receives this broadcast, but only the device with IP address 192.168.1.1 responds. It sends a unicast ARP Reply directly back: \"I have 192.168.1.1, and my MAC address is A1:B2:C3:D4:E5:F6.\" Your computer records this mapping in its ARP cache — with a timer of typically 20 minutes — and uses the MAC address to build the Ethernet frame. ARP only works within the same local network segment. ARP requests never cross a router."
+    },
+    {
+      "category": "Gray Areas",
+      "title": "Path MTU, Fragmentation, and the Don't Fragment Bit",
+      "text": "Every network link has a Maximum Transmission Unit, or MTU. This is the largest packet size that can be transmitted across that link without being broken into pieces. Standard Ethernet has an MTU of 1500 bytes. When a packet is larger than the MTU of a link it needs to traverse, one of two things happens depending on how the packet is configured. If the Don't Fragment bit in the IP header is set to zero, the router is allowed to fragment the packet — to split it into smaller pieces, each with its own IP header, that can each fit within the MTU. The receiving device is responsible for reassembling the pieces. Fragmentation is generally undesirable because it increases overhead and slows things down. If the Don't Fragment bit is set to one — which is the default for TCP connections — the router is NOT allowed to fragment the packet. If the packet is too large for the next link, the router drops the packet entirely and sends an ICMP error message back to the source. The ICMP error is of type 3, subtype 4, meaning \"Destination Unreachable: Fragmentation Needed.\" Crucially, the router includes the MTU of the problematic link in this ICMP message. The source device receives this ICMP message and learns: I need to use a smaller packet size for this path. It reduces its TCP Maximum Segment Size accordingly and retransmits. This automatic discovery process is called Path MTU Discovery, and it is how TCP connections automatically adapt to the smallest MTU along any given path."
+    }
+  ]
+}

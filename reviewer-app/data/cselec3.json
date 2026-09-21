@@ -1,0 +1,64 @@
+{
+  "id": "cselec3",
+  "title": "CS Elec 3 - Data Analytics",
+  "description": "Power BI for Business Intelligence",
+  "categories": ["Power BI Basics", "Data Modeling", "DAX", "Visualizations"],
+  "cards": [
+    {
+      "category": "Power BI Basics",
+      "question": "What is Power BI?",
+      "answer": "A collection of software services, apps, and connectors that work together to turn unrelated sources of data into coherent, visually immersive, and interactive insights.",
+      "explanation": "Power BI allows you to connect to multiple data sources, clean and model data, and create reports and dashboards."
+    },
+    {
+      "category": "Power BI Basics",
+      "question": "What are the three main components of Power BI?",
+      "answer": "Power BI Desktop, Power BI Service (SaaS), and Power BI Mobile Apps.",
+      "explanation": "Desktop is for authoring, Service is for publishing and sharing, and Mobile is for consuming reports on the go."
+    },
+    {
+      "category": "Data Modeling",
+      "question": "What is the purpose of Power Query?",
+      "answer": "To connect, transform, and clean data before loading it into the Power BI data model.",
+      "explanation": "Power Query uses the M formula language to define data transformation steps."
+    },
+    {
+      "category": "DAX",
+      "question": "What does DAX stand for?",
+      "answer": "Data Analysis Expressions.",
+      "explanation": "DAX is a formula expression language used in Analysis Services, Power BI, and Power Pivot in Excel."
+    },
+    {
+      "category": "DAX",
+      "question": "What is the difference between a Calculated Column and a Measure in DAX?",
+      "answer": "A Calculated Column evaluates row by row and stores data in the model, while a Measure evaluates over an aggregation or filter context and doesn't store values directly.",
+      "explanation": "Use Calculated Columns for slicing/filtering and Measures for aggregations (like SUM, AVERAGE)."
+    }
+  ],
+  "questions": [
+    {
+      "type": "mc",
+      "category": "Power BI Basics",
+      "question": "Which of the following is used to create and author reports in Power BI?",
+      "options": ["Power BI Desktop", "Power BI Service", "Power BI Mobile", "Power Query"],
+      "correctAnswer": 0,
+      "explanation": "Power BI Desktop is the free Windows desktop application used to build reports."
+    },
+    {
+      "type": "tf",
+      "category": "Data Modeling",
+      "question": "True or False: Power Query uses the DAX language for data transformations.",
+      "options": ["False", "True"],
+      "correctAnswer": 0,
+      "explanation": "Power Query uses the M language, while DAX is used for calculations and aggregations in the data model."
+    },
+    {
+      "type": "mc",
+      "category": "Visualizations",
+      "question": "Which visualization is best suited for showing the relationship between two numerical variables?",
+      "options": ["Scatter chart", "Pie chart", "Bar chart", "Card"],
+      "correctAnswer": 0,
+      "explanation": "A scatter chart displays points on a two-dimensional plot to show how two variables are related."
+    }
+  ]
+}
