@@ -48,6 +48,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
   const audioCtxRef   = useRef<AudioContext | null>(null);
   const currentIndexRef = useRef(0);
   const isPausedRef     = useRef(false);
+  const isPlayingRef    = useRef(false);
   const lessonItemsRef  = useRef<LessonItem[]>([]);
   const voiceRef        = useRef<SpeechSynthesisVoice | null>(null);
   const speechRateRef   = useRef(0.88);
@@ -55,6 +56,7 @@ export default function LessonMode({ subject, activeCategory }: { subject: Subje
   // Keep refs in sync with state
   useEffect(() => { currentIndexRef.current = currentIndex; }, [currentIndex]);
   useEffect(() => { isPausedRef.current = isPaused; }, [isPaused]);
+  useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
   useEffect(() => { voiceRef.current = voice; }, [voice]);
   useEffect(() => { speechRateRef.current = speechRate; }, [speechRate]);
 
