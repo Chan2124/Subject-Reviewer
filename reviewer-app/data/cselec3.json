@@ -1,64 +1,1578 @@
 {
   "id": "cselec3",
-  "title": "CS Elec 3 - Data Analytics",
-  "description": "Power BI for Business Intelligence",
-  "categories": ["Power BI Basics", "Data Modeling", "DAX", "Visualizations"],
+  "title": "CS Elective 2 - BI Quiz Reviewer",
+  "description": "Business Intelligence Quiz Reviewer based on PDF",
+  "categories": [
+    "Core Concepts",
+    "Quiz 1 - Big Data Analytics",
+    "Quiz 2 - Data Sources & Integration",
+    "Quiz 3 - Data Cleaning and Transformation Transformation",
+    "Quiz 4 - Data Warehousing",
+    "Quiz 5 - Data Modeling for Business Intelligence Intelligence"
+  ],
+  "lessons": [
+    {
+      "title": "5 V's of Big Data",
+      "text": "Volume = a LOT of data stored (size, years of records, many devices). Velocity = SPEED - data arriving fast / needs real-time reaction. Variety = DIFFERENT FORMATS mixed together (text + images + audio + tables). Veracity = TRUST/ACCURACY problem (duplicates, missing, inconsistent, dirty). Value = the data actually IMPROVED a decision or created benefit.",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "4 Types of Analytics",
+      "text": "Descriptive = What happened? -> dashboards, past totals, history only. Diagnostic = Why did it happen? -> investigating a cause, comparing logs/records after the fact. Predictive = What will happen? -> forecasts, estimates, churn/demand prediction. Prescriptive = What should we do? -> recommends an action, usually under constraints (budget, capacity). Tip: if it forecasts AND THEN recommends an action, it's Predictive -> Prescriptive in that order.",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "ETL",
+      "text": "Extract (pull raw data from source) -> Transform (clean/standardize/convert) -> Load (store the finished data in the warehouse). Whatever verb the question uses tells you the stage: connects/retrieves/pulls = Extract; converts/standardizes/removes duplicates = Transform; stores in the warehouse = Load.",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "Data Types",
+      "text": "Structured = fixed rows/columns/data types (like a spreadsheet). Semi-structured = has some organization (like JSON keys) but no fixed schema - different records can have different fields. Unstructured = free-form (text, images, audio) -> needs NLP (text) or computer vision (images) to analyze.",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "Internal vs External Sources",
+      "text": "Internal = data the ORG ITSELF generated (its own POS, inventory, loyalty program). External = data from OUTSIDE the org (government stats, weather, market data) even if you use it internally.",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "Warehouse Traits (SITN)",
+      "text": "Subject-oriented (organized around a business subject like customers/sales, not around one app). Integrated (combined/standardized from multiple systems). Time-variant (keeps historical data over time so you can compare periods). Non-volatile (data isn't overwritten - analysts mostly read, not update).",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "OLTP vs OLAP",
+      "text": "OLTP = fast, current, transactional (recording a payment/order as it happens). OLAP = analyzing large historical volumes across many dimensions.",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "OLAP Operations",
+      "text": "Slice = fix/restrict ONE dimension (e.g., just 2026). Dice = pick RANGES/subsets across SEVERAL dimensions at once (e.g., product + location + time together). Drill down = go from summary to MORE detail (year -> quarter -> month -> day). Roll up = go from detail to LESS detail (opposite of drill down).",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "Star vs Snowflake Schema",
+      "text": "Star = ONE fact table with dimension tables connected DIRECTLY to it (simple, fast, fewer joins - preferred when you want simplicity/speed). Snowflake = dimension tables are further split into related sub-dimension tables (more normalized, but more joins -> more complex filter paths, harder to navigate).",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "Fact vs Dimension Tables",
+      "text": "Fact table = the numbers/measures you're analyzing (sales amount, quantity, cost) plus foreign keys; grain = what one row represents (e.g., one row per product per order). Dimension table = descriptive attributes used to filter/group (product name, customer city, date). Relationship direction: ONE dimension row relates to MANY fact rows (one-to-many, dimension key = primary, fact key = foreign).",
+      "category": "Core Concepts"
+    },
+    {
+      "title": "Common Power Query Fixes",
+      "text": "Duplicate rows -> Remove Duplicates. Need columns from another table matched by a key -> Merge. Two tables, same columns, want to stack rows -> Append. Extra spaces / hidden characters in text -> Trim / Clean. Date read wrong (05/06 read as May 6 instead of June 5) -> Change Type Using Locale. Inconsistent spelling of the same category -> Replace Values or Conditional Column. Keep all rows from one table + only matching rows from another -> Left Outer Join.",
+      "category": "Core Concepts"
+    }
+  ],
   "cards": [
     {
-      "category": "Power BI Basics",
-      "question": "What is Power BI?",
-      "answer": "A collection of software services, apps, and connectors that work together to turn unrelated sources of data into coherent, visually immersive, and interactive insights.",
-      "explanation": "Power BI allows you to connect to multiple data sources, clean and model data, and create reports and dashboards."
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Weather+sensor data improves the irrigation decision",
+      "answer": "Value",
+      "explanation": "the data directly made a decision better, that\u2019s the definition of Value."
     },
     {
-      "category": "Power BI Basics",
-      "question": "What are the three main components of Power BI?",
-      "answer": "Power BI Desktop, Power BI Service (SaaS), and Power BI Mobile Apps.",
-      "explanation": "Desktop is for authoring, Service is for publishing and sharing, and Mobile is for consuming reports on the go."
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "5 yrs of HD video from hundreds of cameras",
+      "answer": "Volume",
+      "explanation": "the giveaway is sheer size/amount stored, not speed or variety."
     },
     {
-      "category": "Data Modeling",
-      "question": "What is the purpose of Power Query?",
-      "answer": "To connect, transform, and clean data before loading it into the Power BI data model.",
-      "explanation": "Power Query uses the M formula language to define data transformation steps."
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Moderate dataset, but lots of false entries/inconsistent formats, teammate says \u201cnot Big Data because no huge volume\u201d",
+      "answer": "Different projects face different V-related challenges",
+      "explanation": "Big Data isn\u2019t only about Volume; this project\u2019s challenge is Veracity instead."
     },
     {
-      "category": "DAX",
-      "question": "What does DAX stand for?",
-      "answer": "Data Analysis Expressions.",
-      "explanation": "DAX is a formula expression language used in Analysis Services, Power BI, and Power Pivot in Excel."
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Forecasts riders, THEN recommends bus counts",
+      "answer": "Prescriptive",
+      "explanation": "it ends in a concrete recommendation/action, not just a forecast."
     },
     {
-      "category": "DAX",
-      "question": "What is the difference between a Calculated Column and a Measure in DAX?",
-      "answer": "A Calculated Column evaluates row by row and stores data in the model, while a Measure evaluates over an aggregation or filter context and doesn't store values directly.",
-      "explanation": "Use Calculated Columns for slicing/filtering and Measures for aggregations (like SUM, AVERAGE)."
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Streaming wallet transactions, flagged within seconds",
+      "answer": "Velocity and fraud detection",
+      "explanation": "\u201cwithin seconds\u201d = speed (Velocity); flagging unusual activity = fraud detection use case."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Dashboard shows last semester\u2019s totals",
+      "answer": "Descriptive",
+      "explanation": "pure history, no analysis of cause or future."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Marketplace collects searches/clicks/orders/reviews/deliveries from millions of shoppers",
+      "answer": "It is large, fast, diverse, and complex",
+      "explanation": "that phrase covers Volume+Velocity+Variety together, which is why it\u2019s Big Data."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Considers predictions + distance + capacity to CHOOSE a warehouse",
+      "answer": "What should we do?",
+      "explanation": "it\u2019s making a decision recommendation = Prescriptive."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Combines tables + notes + X-rays + audio",
+      "answer": "Variety",
+      "explanation": "multiple different data formats combined."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Combines population + rainfall + evacuation capacity to prepare for typhoons",
+      "answer": "Disaster response planning",
+      "explanation": "this is the named application/use case, not a V-characteristic question."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Duplicate records, missing grades, inconsistent dates",
+      "answer": "Veracity",
+      "explanation": "all of these are data quality/trust problems."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Live GPS from thousands of vehicles every few seconds",
+      "answer": "Velocity",
+      "explanation": "continuous fast-arriving data."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Dashboard reports past month\u2019s dengue case counts",
+      "answer": "What happened?",
+      "explanation": "Descriptive, reporting history."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Uses past consumption + weather to estimate NEXT WEEK\u2019s demand",
+      "answer": "Forecasts and probabilities",
+      "explanation": "this is the typical Predictive analytics output."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "First predicts demand, then chooses staffing/vehicles under budget",
+      "answer": "Predictive then Prescriptive",
+      "explanation": "forecast first, decision/action second, in that order."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Estimates which subscribers will likely leave next month",
+      "answer": "Predictive",
+      "explanation": "estimating a future outcome (churn)."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Compares logs to the outage time to find the cause",
+      "answer": "Causes and relationships",
+      "explanation": "investigating \u201cwhy,\u201d which is the Diagnostic output."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Sales fell",
+      "answer": "digs into stock records -> finds the best-seller was out of stock -> Diagnostic",
+      "explanation": "explaining why something happened."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Uses grades+attendance+LMS activity to flag at-risk students",
+      "answer": "Education retention analysis",
+      "explanation": "named industry application."
+    },
+    {
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Traditional spreadsheet can\u2019t keep up with continuously growing sensor data",
+      "answer": "Scalable storage and processing",
+      "explanation": "the lesson here is that Big Data needs infrastructure that scales, unlike traditional tools."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Two branches store dates as MM/DD/YYYY vs DD/MM/YYYY, causing wrong totals",
+      "answer": "Format differences",
+      "explanation": "same information, inconsistent format."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "JSON records where some orders have a discount field and others don\u2019t (no fixed structure)",
+      "answer": "Semi-structured",
+      "explanation": "keys organize the data but there\u2019s no rigid table schema."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Dashboard queries the live SQL database each time instead of storing a copy",
+      "answer": "Direct Query",
+      "explanation": "this is the connection mode that queries live rather than importing a snapshot."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Converts currency, standardizes airport codes, removes duplicate bookings",
+      "answer": "Transform",
+      "explanation": "these are all cleaning/standardizing actions (the \u201cT\u201d in ETL)."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Same person appears as \u201cMaria Santos\u201d in one system and \u201cM. Santos\u201d in another",
+      "answer": "Identity matching",
+      "explanation": "you need to recognize these as the same entity across systems."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "After cleaning, stores prepared records in the warehouse",
+      "answer": "Load",
+      "explanation": "the final ETL stage, putting finished data into storage."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Reports stop refreshing after too many requests to a cloud API",
+      "answer": "API request limits",
+      "explanation": "cloud APIs cap how many calls you can make."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Wants both operational AND environmental info for delivery-time estimates",
+      "answer": "Internal order records plus external traffic and weather data",
+      "explanation": "operational = internal, environmental = external."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Server address and DB name given, but connection fails because it \u201ccan\u2019t verify the user\u201d",
+      "answer": "Authentication credentials",
+      "explanation": "the system needs to confirm WHO is connecting, not just where."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Excel connector selected, workbook opened - what\u2019s next before loading?",
+      "answer": "Select the required sheet, preview records, and verify column names and data types",
+      "explanation": "standard pre-load checks."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Branch spreadsheets easiest to combine when",
+      "answer": "Keep one header row and consistent column names",
+      "explanation": "consistency is what lets Power BI stack/merge them cleanly."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Analyzing review TEXT and product PHOTOS",
+      "answer": "Unstructured data using natural language processing and computer vision",
+      "explanation": "text needs NLP, images need computer vision."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Hourly sales vs weekly supplier updates cause inconsistent \u201clatest\u201d totals",
+      "answer": "Data latency",
+      "explanation": "the sources refresh at different speeds/times, so they\u2019re out of sync."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Cloud database only accessible with internet connection",
+      "answer": "Internet dependence",
+      "explanation": "a limitation specific to cloud sources."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Rows/columns with fixed data types",
+      "answer": "Structured",
+      "explanation": "textbook definition."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Combines enrollment + grades + attendance + LMS activity into ONE dataset",
+      "answer": "Data integration",
+      "explanation": "the general process of merging multiple sources into a unified view."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Retrieves booking records from Excel + database + API",
+      "answer": "Extract",
+      "explanation": "pulling raw data from multiple sources is the first ETL stage."
+    },
+    {
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Multi-country bank data: must restrict sensitive records, standardize currencies, and identify data ownership",
+      "answer": "Security and privacy, format differences, and governance",
+      "explanation": "three distinct concerns bundled together (privacy=security, currency=format, ownership=governance)."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Price column needs PRECISE currency math",
+      "answer": "Fixed decimal number",
+      "explanation": "this data type avoids floating-point rounding errors, important for money."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Same Order ID/product/amount appears twice after combining overlapping files",
+      "answer": "Select the identifying columns and choose Remove Duplicates",
+      "explanation": "you must pick which columns define \u201cthe same record\u201d first."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Why select unique-identifying columns BEFORE removing duplicates?",
+      "answer": "To ensure only records representing the same entity or transaction are removed",
+      "explanation": "otherwise you might delete records that only look similar but aren\u2019t actually duplicates."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "One table says \u201cOrder Amount,\u201d another says \u201cSales Value,\u201d same meaning",
+      "answer": "before appending, Standardize the corresponding column names",
+      "explanation": "Append needs matching column names to stack correctly."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Customer ID missing for several rows, and it\u2019s essential for linking",
+      "answer": "Remove or isolate those records",
+      "explanation": "a critical missing value that can\u2019t reasonably be guessed or filled in."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Quantity shows -5, but quantities can\u2019t be negative",
+      "answer": "An invalid or incorrect value",
+      "explanation": "it violates a business rule (real-world impossibility), not just \u201cmissing.\u201d"
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "\u201cMetro Manila,\u201d \u201cNCR,\u201d \u201cNational Capital Region\u201d treated as 3 separate regions",
+      "answer": "Standardize the category values",
+      "explanation": "these are the same place, spelled differently."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "City field has \u201d Cebu City \u201d with extra spaces",
+      "answer": "Trim and Clean",
+      "explanation": "Trim removes leading/trailing spaces, Clean removes hidden non printable characters."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Orders table (CustomerID, Amount) + Customers table (CustomerID, Name, City), want Name+City added to Orders",
+      "answer": "Merge using Customer ID as the matching field",
+      "explanation": "Merge pulls columns from another table via a shared key."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Dates stored as TEXT sort alphabetically instead of chronologically",
+      "answer": "Convert the column to the Date data type",
+      "explanation": "text sorts by characters, not real date value."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Two monthly tables, same column names/types, different row counts, want ONE combined table",
+      "answer": "Append Queries",
+      "explanation": "Append stacks rows on top of each other when structure matches."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Gender recorded as \u201cFemale,\u201d \u201cF,\u201d \u201cWoman\u201d - three spellings, one meaning",
+      "answer": "Replace Values or a Conditional Column",
+      "explanation": "both let you map variants to one standard value."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "05/06/2026 should mean 5 June but is read as May 6",
+      "answer": "Change Type Using Locale",
+      "explanation": "this lets you specify the correct date format/region interpretation."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Data is cleaned, but relationships still break and charts mislead",
+      "answer": "Analysis quality depends heavily on source-data quality",
+      "explanation": "the core lesson: garbage in, garbage out, even after some cleaning."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Want ALL Orders rows plus matching customer info WHEN AVAILABLE, keeping unmatched orders too",
+      "answer": "Left outer join with Orders as the left table",
+      "explanation": "left outer join keeps every row of the \u201cleft\u201d/main table regardless of a match."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Student IDs like \u201c00127\u201d must keep leading zeros and won\u2019t be used in math",
+      "answer": "Text",
+      "explanation": "numeric types would drop the leading zero; Text preserves it exactly."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Want to keep all rows but order them by region, then by amount high->low",
+      "answer": "Sorting with multiple-column priority",
+      "explanation": "first sort key = region, second sort key = amount descending."
+    },
+    {
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Want only Central Visayas orders above 5,000 from September 2026",
+      "answer": "Filtering with multiple conditions",
+      "explanation": "three separate criteria (region + amount + date) applied together."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Keeps 5 years of reservations to compare seasons/origins over time",
+      "answer": "Time-variant",
+      "explanation": "the warehouse preserves history across time periods for comparison."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Analysts mostly READ; routine transactions don\u2019t overwrite past values",
+      "answer": "Non-volatile",
+      "explanation": "once loaded, warehouse data isn\u2019t continually changed."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Needs a repository ONLY for student services (enrollment/attendance/performance)",
+      "answer": "A student performance data mart",
+      "explanation": "a mart is a smaller, department/topic-specific repository (vs. a full enterprise warehouse)."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Needs to compare annual sales across regions/products with COMPLEX queries",
+      "answer": "A data warehouse optimized for analysis",
+      "explanation": "warehouses are built for this kind of heavy analytical querying, unlike operational databases."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Moves from annual",
+      "answer": "quarterly -> monthly -> daily results -> Drill down",
+      "explanation": "going from summary to more detail."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Sales amount, quantity sold, and profit being evaluated",
+      "answer": "Measures",
+      "explanation": "these are the numeric values you analyze/aggregate (as opposed to Dimensions, which describe/filter)."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Customer codes from different systems converted to ONE standard before storage",
+      "answer": "Integrated",
+      "explanation": "combining and standardizing data from multiple sources is the \u201cIntegrated\u201d warehouse trait."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Wants to compare enrollment/performance/graduation/employment across several years",
+      "answer": "It supports integrated historical analysis",
+      "explanation": "combines multiple data types (integrated) over time (historical), exactly what a warehouse is built for."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Dashboards/reports built from warehouse models sit in which architecture layer?",
+      "answer": "Presentation layer",
+      "explanation": "the top layer users actually see and interact with."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Must record thousands of payments QUICKLY and ACCURATELY, using current data",
+      "answer": "OLTP",
+      "explanation": "fast, real-time transaction processing, not historical analysis."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Views sales in Manila+Cebu during Q1, selecting ranges across product/location/time simultaneously",
+      "answer": "Dice",
+      "explanation": "multiple dimensions restricted at once = Dice (vs. Slice, which is only one dimension)."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Branch, product category, hour, day-of-week - what are these?",
+      "answer": "Dimensions",
+      "explanation": "descriptive fields used to break down/filter the data, not the numbers being measured."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Order updates as it\u2019s accepted",
+      "answer": "collected -> delivered (live, ongoing events) -> Operational database",
+      "explanation": "this is transactional/real-time activity, not warehouse analysis."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Wants shared definitions and cross-department analysis (bookings/ops/maintenance/CS/finance)",
+      "answer": "An enterprise data warehouse",
+      "explanation": "spans the WHOLE organization, unlike a single department data mart."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Departments define \u201cactive customer\u201d differently, causing conflicting reports",
+      "answer": "an EDW fixes this because It establishes common definitions and standards",
+      "explanation": "a shared, agreed-upon definition across departments."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Combines historical transactions from Manila/Cebu/Davao for nationwide analysis",
+      "answer": "A data warehouse",
+      "explanation": "designed exactly for combining and analyzing historical data across locations."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Compares monthly payments across branches/customer groups using years of records",
+      "answer": "OLAP",
+      "explanation": "multi-dimensional analysis over historical data."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Organized around customers, products, sales, students (business topics, not one app\u2019s structure)",
+      "answer": "Subject-oriented",
+      "explanation": "organized by business subject, not by source system."
+    },
+    {
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Enterprise warehouse feeds a smaller repository used only by finance",
+      "answer": "Finance data mart",
+      "explanation": "a mart is a scoped-down subset of the full warehouse for one department."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "A proposed dimension key has duplicate/blank values",
+      "answer": "must be fixed because A primary key must uniquely identify each row and should not be blank",
+      "explanation": "that\u2019s the definition of a valid primary key."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Wants simple relationships, clear filter paths, efficient queries",
+      "answer": "A star schema",
+      "explanation": "star schema is simpler and faster than snowflake because dimensions connect directly to the fact table."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Table has Product Key, Product Name, Category, Brand (descriptive fields, no numbers to sum)",
+      "answer": "It stores descriptive information for filtering and grouping",
+      "explanation": "this makes it a dimension table."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Connects sales with product/customer/branch/date so users can filter consistently",
+      "answer": "Data modeling",
+      "explanation": "building the structure of relationships between tables is data modeling itself."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Mixes monthly balances with individual transactions in the SAME fact table without distinguishing detail levels",
+      "answer": "Fact table grain was neglected",
+      "explanation": "grain defines what one row represents; mixing two levels of detail breaks this."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Several bidirectional relationships create multiple filter routes (circular paths)",
+      "answer": "should Prefer single-direction filtering and avoid circular relationship paths",
+      "explanation": "bidirectional/circular filters cause ambiguous or incorrect results."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "An order has 3 products, and the model records ONE ROW PER PRODUCT within that order",
+      "answer": "the grain is One row per product in each order",
+      "explanation": "literally describes what one fact-table row represents."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Which dimension tells you the selected products are smartphones?",
+      "answer": "DimProduct",
+      "explanation": "product category info lives in the product dimension table."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "One product row relates to MANY sales rows",
+      "answer": "the cardinality from dimension to fact should be One-to-many",
+      "explanation": "one dimension entry, many matching fact entries."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Selecting a city in DimCustomer filters matching FactSales rows",
+      "answer": "this works because of A relationship through matching CustomerKey columns",
+      "explanation": "the relationship is what allows filters to flow from dimension to fact."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "FactSales in the center, DimDate/Product/Customer/Branch connect directly to it",
+      "answer": "Star schema",
+      "explanation": "fact table in the middle, dimensions directly attached, no sub-dimension layers."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "ProductKey is TEXT in one table but a WHOLE NUMBER in the other",
+      "answer": "before relating them, Use compatible data types for both key columns",
+      "explanation": "relationships require matching data types on both sides."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Product, Category, and Department split into three related dimension tables",
+      "answer": "Snowflake schema",
+      "explanation": "dimensions normalized into further sub-tables."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Two tables with REPEATED keys connected directly produce unexpected totals",
+      "answer": "investigate Many-to-many relationships first",
+      "explanation": "repeated keys on both sides often signal an accidental many-to- many that inflates totals."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "A report exposes technical key columns, keeps unused fields, and relies on implicit aggregation for KPIs",
+      "answer": "improve by Hide technical keys, remove unused fields, and create explicit DAX measures",
+      "explanation": "cleaner, safer, and more predictable than relying on default (implicit) aggregation."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Table has Sale ID, Date Key, Product Key, Quantity, Discount, Cost, Sales Amount",
+      "answer": "Fact table",
+      "explanation": "it\u2019s mostly numeric measures and foreign keys, the definition of a fact table."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "\u201cTotal smartphone sales in Cebu during September\u201d - where does the AMOUNT being summed come from?",
+      "answer": "FactSales",
+      "explanation": "the fact table is always where you pull the numeric measure from; dimensions only filter/describe."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Users struggle because product filters must pass through category and department tables first",
+      "answer": "this is a Snowflake schema disadvantage: it creates more relationships and can complicate filter behavior",
+      "explanation": "more hops between tables = harder navigation."
+    },
+    {
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "DimProduct has one row for P101; FactSales has P101 in thousands of rows",
+      "answer": "DimProduct[ProductKey] is primary; FactSales[ProductKey] is foreign",
+      "explanation": "one-unique-row side = primary key, many-repeated side = foreign key."
     }
   ],
   "questions": [
     {
-      "type": "mc",
-      "category": "Power BI Basics",
-      "question": "Which of the following is used to create and author reports in Power BI?",
-      "options": ["Power BI Desktop", "Power BI Service", "Power BI Mobile", "Power Query"],
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Weather+sensor data improves the irrigation decision",
+      "options": [
+        "Value"
+      ],
       "correctAnswer": 0,
-      "explanation": "Power BI Desktop is the free Windows desktop application used to build reports."
+      "explanation": "the data directly made a decision better, that\u2019s the definition of Value."
     },
     {
-      "type": "tf",
-      "category": "Data Modeling",
-      "question": "True or False: Power Query uses the DAX language for data transformations.",
-      "options": ["False", "True"],
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "5 yrs of HD video from hundreds of cameras",
+      "options": [
+        "Volume"
+      ],
       "correctAnswer": 0,
-      "explanation": "Power Query uses the M language, while DAX is used for calculations and aggregations in the data model."
+      "explanation": "the giveaway is sheer size/amount stored, not speed or variety."
     },
     {
-      "type": "mc",
-      "category": "Visualizations",
-      "question": "Which visualization is best suited for showing the relationship between two numerical variables?",
-      "options": ["Scatter chart", "Pie chart", "Bar chart", "Card"],
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Moderate dataset, but lots of false entries/inconsistent formats, teammate says \u201cnot Big Data because no huge volume\u201d",
+      "options": [
+        "Different projects face different V-related challenges"
+      ],
       "correctAnswer": 0,
-      "explanation": "A scatter chart displays points on a two-dimensional plot to show how two variables are related."
+      "explanation": "Big Data isn\u2019t only about Volume; this project\u2019s challenge is Veracity instead."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Forecasts riders, THEN recommends bus counts",
+      "options": [
+        "Prescriptive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "it ends in a concrete recommendation/action, not just a forecast."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Streaming wallet transactions, flagged within seconds",
+      "options": [
+        "Velocity and fraud detection"
+      ],
+      "correctAnswer": 0,
+      "explanation": "\u201cwithin seconds\u201d = speed (Velocity); flagging unusual activity = fraud detection use case."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Dashboard shows last semester\u2019s totals",
+      "options": [
+        "Descriptive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "pure history, no analysis of cause or future."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Marketplace collects searches/clicks/orders/reviews/deliveries from millions of shoppers",
+      "options": [
+        "It is large, fast, diverse, and complex"
+      ],
+      "correctAnswer": 0,
+      "explanation": "that phrase covers Volume+Velocity+Variety together, which is why it\u2019s Big Data."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Considers predictions + distance + capacity to CHOOSE a warehouse",
+      "options": [
+        "What should we do?"
+      ],
+      "correctAnswer": 0,
+      "explanation": "it\u2019s making a decision recommendation = Prescriptive."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Combines tables + notes + X-rays + audio",
+      "options": [
+        "Variety"
+      ],
+      "correctAnswer": 0,
+      "explanation": "multiple different data formats combined."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Combines population + rainfall + evacuation capacity to prepare for typhoons",
+      "options": [
+        "Disaster response planning"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this is the named application/use case, not a V-characteristic question."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Duplicate records, missing grades, inconsistent dates",
+      "options": [
+        "Veracity"
+      ],
+      "correctAnswer": 0,
+      "explanation": "all of these are data quality/trust problems."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Live GPS from thousands of vehicles every few seconds",
+      "options": [
+        "Velocity"
+      ],
+      "correctAnswer": 0,
+      "explanation": "continuous fast-arriving data."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Dashboard reports past month\u2019s dengue case counts",
+      "options": [
+        "What happened?"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Descriptive, reporting history."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Uses past consumption + weather to estimate NEXT WEEK\u2019s demand",
+      "options": [
+        "Forecasts and probabilities"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this is the typical Predictive analytics output."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "First predicts demand, then chooses staffing/vehicles under budget",
+      "options": [
+        "Predictive then Prescriptive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "forecast first, decision/action second, in that order."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Estimates which subscribers will likely leave next month",
+      "options": [
+        "Predictive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "estimating a future outcome (churn)."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Compares logs to the outage time to find the cause",
+      "options": [
+        "Causes and relationships"
+      ],
+      "correctAnswer": 0,
+      "explanation": "investigating \u201cwhy,\u201d which is the Diagnostic output."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Sales fell",
+      "options": [
+        "digs into stock records -> finds the best-seller was out of stock -> Diagnostic"
+      ],
+      "correctAnswer": 0,
+      "explanation": "explaining why something happened."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Uses grades+attendance+LMS activity to flag at-risk students",
+      "options": [
+        "Education retention analysis"
+      ],
+      "correctAnswer": 0,
+      "explanation": "named industry application."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 1 - Big Data Analytics",
+      "question": "Traditional spreadsheet can\u2019t keep up with continuously growing sensor data",
+      "options": [
+        "Scalable storage and processing"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the lesson here is that Big Data needs infrastructure that scales, unlike traditional tools."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Two branches store dates as MM/DD/YYYY vs DD/MM/YYYY, causing wrong totals",
+      "options": [
+        "Format differences"
+      ],
+      "correctAnswer": 0,
+      "explanation": "same information, inconsistent format."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "JSON records where some orders have a discount field and others don\u2019t (no fixed structure)",
+      "options": [
+        "Semi-structured"
+      ],
+      "correctAnswer": 0,
+      "explanation": "keys organize the data but there\u2019s no rigid table schema."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Dashboard queries the live SQL database each time instead of storing a copy",
+      "options": [
+        "Direct Query"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this is the connection mode that queries live rather than importing a snapshot."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Converts currency, standardizes airport codes, removes duplicate bookings",
+      "options": [
+        "Transform"
+      ],
+      "correctAnswer": 0,
+      "explanation": "these are all cleaning/standardizing actions (the \u201cT\u201d in ETL)."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Same person appears as \u201cMaria Santos\u201d in one system and \u201cM. Santos\u201d in another",
+      "options": [
+        "Identity matching"
+      ],
+      "correctAnswer": 0,
+      "explanation": "you need to recognize these as the same entity across systems."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "After cleaning, stores prepared records in the warehouse",
+      "options": [
+        "Load"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the final ETL stage, putting finished data into storage."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Reports stop refreshing after too many requests to a cloud API",
+      "options": [
+        "API request limits"
+      ],
+      "correctAnswer": 0,
+      "explanation": "cloud APIs cap how many calls you can make."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Wants both operational AND environmental info for delivery-time estimates",
+      "options": [
+        "Internal order records plus external traffic and weather data"
+      ],
+      "correctAnswer": 0,
+      "explanation": "operational = internal, environmental = external."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Server address and DB name given, but connection fails because it \u201ccan\u2019t verify the user\u201d",
+      "options": [
+        "Authentication credentials"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the system needs to confirm WHO is connecting, not just where."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Excel connector selected, workbook opened - what\u2019s next before loading?",
+      "options": [
+        "Select the required sheet, preview records, and verify column names and data types"
+      ],
+      "correctAnswer": 0,
+      "explanation": "standard pre-load checks."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Branch spreadsheets easiest to combine when",
+      "options": [
+        "Keep one header row and consistent column names"
+      ],
+      "correctAnswer": 0,
+      "explanation": "consistency is what lets Power BI stack/merge them cleanly."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Analyzing review TEXT and product PHOTOS",
+      "options": [
+        "Unstructured data using natural language processing and computer vision"
+      ],
+      "correctAnswer": 0,
+      "explanation": "text needs NLP, images need computer vision."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Hourly sales vs weekly supplier updates cause inconsistent \u201clatest\u201d totals",
+      "options": [
+        "Data latency"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the sources refresh at different speeds/times, so they\u2019re out of sync."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Cloud database only accessible with internet connection",
+      "options": [
+        "Internet dependence"
+      ],
+      "correctAnswer": 0,
+      "explanation": "a limitation specific to cloud sources."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Rows/columns with fixed data types",
+      "options": [
+        "Structured"
+      ],
+      "correctAnswer": 0,
+      "explanation": "textbook definition."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Combines enrollment + grades + attendance + LMS activity into ONE dataset",
+      "options": [
+        "Data integration"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the general process of merging multiple sources into a unified view."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Retrieves booking records from Excel + database + API",
+      "options": [
+        "Extract"
+      ],
+      "correctAnswer": 0,
+      "explanation": "pulling raw data from multiple sources is the first ETL stage."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 2 - Data Sources & Integration",
+      "question": "Multi-country bank data: must restrict sensitive records, standardize currencies, and identify data ownership",
+      "options": [
+        "Security and privacy, format differences, and governance"
+      ],
+      "correctAnswer": 0,
+      "explanation": "three distinct concerns bundled together (privacy=security, currency=format, ownership=governance)."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Price column needs PRECISE currency math",
+      "options": [
+        "Fixed decimal number"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this data type avoids floating-point rounding errors, important for money."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Same Order ID/product/amount appears twice after combining overlapping files",
+      "options": [
+        "Select the identifying columns and choose Remove Duplicates"
+      ],
+      "correctAnswer": 0,
+      "explanation": "you must pick which columns define \u201cthe same record\u201d first."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Why select unique-identifying columns BEFORE removing duplicates?",
+      "options": [
+        "To ensure only records representing the same entity or transaction are removed"
+      ],
+      "correctAnswer": 0,
+      "explanation": "otherwise you might delete records that only look similar but aren\u2019t actually duplicates."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "One table says \u201cOrder Amount,\u201d another says \u201cSales Value,\u201d same meaning",
+      "options": [
+        "before appending, Standardize the corresponding column names"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Append needs matching column names to stack correctly."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Customer ID missing for several rows, and it\u2019s essential for linking",
+      "options": [
+        "Remove or isolate those records"
+      ],
+      "correctAnswer": 0,
+      "explanation": "a critical missing value that can\u2019t reasonably be guessed or filled in."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Quantity shows -5, but quantities can\u2019t be negative",
+      "options": [
+        "An invalid or incorrect value"
+      ],
+      "correctAnswer": 0,
+      "explanation": "it violates a business rule (real-world impossibility), not just \u201cmissing.\u201d"
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "\u201cMetro Manila,\u201d \u201cNCR,\u201d \u201cNational Capital Region\u201d treated as 3 separate regions",
+      "options": [
+        "Standardize the category values"
+      ],
+      "correctAnswer": 0,
+      "explanation": "these are the same place, spelled differently."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "City field has \u201d Cebu City \u201d with extra spaces",
+      "options": [
+        "Trim and Clean"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Trim removes leading/trailing spaces, Clean removes hidden non printable characters."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Orders table (CustomerID, Amount) + Customers table (CustomerID, Name, City), want Name+City added to Orders",
+      "options": [
+        "Merge using Customer ID as the matching field"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Merge pulls columns from another table via a shared key."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Dates stored as TEXT sort alphabetically instead of chronologically",
+      "options": [
+        "Convert the column to the Date data type"
+      ],
+      "correctAnswer": 0,
+      "explanation": "text sorts by characters, not real date value."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Two monthly tables, same column names/types, different row counts, want ONE combined table",
+      "options": [
+        "Append Queries"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Append stacks rows on top of each other when structure matches."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Gender recorded as \u201cFemale,\u201d \u201cF,\u201d \u201cWoman\u201d - three spellings, one meaning",
+      "options": [
+        "Replace Values or a Conditional Column"
+      ],
+      "correctAnswer": 0,
+      "explanation": "both let you map variants to one standard value."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "05/06/2026 should mean 5 June but is read as May 6",
+      "options": [
+        "Change Type Using Locale"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this lets you specify the correct date format/region interpretation."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Data is cleaned, but relationships still break and charts mislead",
+      "options": [
+        "Analysis quality depends heavily on source-data quality"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the core lesson: garbage in, garbage out, even after some cleaning."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Want ALL Orders rows plus matching customer info WHEN AVAILABLE, keeping unmatched orders too",
+      "options": [
+        "Left outer join with Orders as the left table"
+      ],
+      "correctAnswer": 0,
+      "explanation": "left outer join keeps every row of the \u201cleft\u201d/main table regardless of a match."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Student IDs like \u201c00127\u201d must keep leading zeros and won\u2019t be used in math",
+      "options": [
+        "Text"
+      ],
+      "correctAnswer": 0,
+      "explanation": "numeric types would drop the leading zero; Text preserves it exactly."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Want to keep all rows but order them by region, then by amount high->low",
+      "options": [
+        "Sorting with multiple-column priority"
+      ],
+      "correctAnswer": 0,
+      "explanation": "first sort key = region, second sort key = amount descending."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 3 - Data Cleaning and Transformation Transformation",
+      "question": "Want only Central Visayas orders above 5,000 from September 2026",
+      "options": [
+        "Filtering with multiple conditions"
+      ],
+      "correctAnswer": 0,
+      "explanation": "three separate criteria (region + amount + date) applied together."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Keeps 5 years of reservations to compare seasons/origins over time",
+      "options": [
+        "Time-variant"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the warehouse preserves history across time periods for comparison."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Analysts mostly READ; routine transactions don\u2019t overwrite past values",
+      "options": [
+        "Non-volatile"
+      ],
+      "correctAnswer": 0,
+      "explanation": "once loaded, warehouse data isn\u2019t continually changed."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Needs a repository ONLY for student services (enrollment/attendance/performance)",
+      "options": [
+        "A student performance data mart"
+      ],
+      "correctAnswer": 0,
+      "explanation": "a mart is a smaller, department/topic-specific repository (vs. a full enterprise warehouse)."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Needs to compare annual sales across regions/products with COMPLEX queries",
+      "options": [
+        "A data warehouse optimized for analysis"
+      ],
+      "correctAnswer": 0,
+      "explanation": "warehouses are built for this kind of heavy analytical querying, unlike operational databases."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Moves from annual",
+      "options": [
+        "quarterly -> monthly -> daily results -> Drill down"
+      ],
+      "correctAnswer": 0,
+      "explanation": "going from summary to more detail."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Sales amount, quantity sold, and profit being evaluated",
+      "options": [
+        "Measures"
+      ],
+      "correctAnswer": 0,
+      "explanation": "these are the numeric values you analyze/aggregate (as opposed to Dimensions, which describe/filter)."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Customer codes from different systems converted to ONE standard before storage",
+      "options": [
+        "Integrated"
+      ],
+      "correctAnswer": 0,
+      "explanation": "combining and standardizing data from multiple sources is the \u201cIntegrated\u201d warehouse trait."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Wants to compare enrollment/performance/graduation/employment across several years",
+      "options": [
+        "It supports integrated historical analysis"
+      ],
+      "correctAnswer": 0,
+      "explanation": "combines multiple data types (integrated) over time (historical), exactly what a warehouse is built for."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Dashboards/reports built from warehouse models sit in which architecture layer?",
+      "options": [
+        "Presentation layer"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the top layer users actually see and interact with."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Must record thousands of payments QUICKLY and ACCURATELY, using current data",
+      "options": [
+        "OLTP"
+      ],
+      "correctAnswer": 0,
+      "explanation": "fast, real-time transaction processing, not historical analysis."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Views sales in Manila+Cebu during Q1, selecting ranges across product/location/time simultaneously",
+      "options": [
+        "Dice"
+      ],
+      "correctAnswer": 0,
+      "explanation": "multiple dimensions restricted at once = Dice (vs. Slice, which is only one dimension)."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Branch, product category, hour, day-of-week - what are these?",
+      "options": [
+        "Dimensions"
+      ],
+      "correctAnswer": 0,
+      "explanation": "descriptive fields used to break down/filter the data, not the numbers being measured."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Order updates as it\u2019s accepted",
+      "options": [
+        "collected -> delivered (live, ongoing events) -> Operational database"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this is transactional/real-time activity, not warehouse analysis."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Wants shared definitions and cross-department analysis (bookings/ops/maintenance/CS/finance)",
+      "options": [
+        "An enterprise data warehouse"
+      ],
+      "correctAnswer": 0,
+      "explanation": "spans the WHOLE organization, unlike a single department data mart."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Departments define \u201cactive customer\u201d differently, causing conflicting reports",
+      "options": [
+        "an EDW fixes this because It establishes common definitions and standards"
+      ],
+      "correctAnswer": 0,
+      "explanation": "a shared, agreed-upon definition across departments."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Combines historical transactions from Manila/Cebu/Davao for nationwide analysis",
+      "options": [
+        "A data warehouse"
+      ],
+      "correctAnswer": 0,
+      "explanation": "designed exactly for combining and analyzing historical data across locations."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Compares monthly payments across branches/customer groups using years of records",
+      "options": [
+        "OLAP"
+      ],
+      "correctAnswer": 0,
+      "explanation": "multi-dimensional analysis over historical data."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Organized around customers, products, sales, students (business topics, not one app\u2019s structure)",
+      "options": [
+        "Subject-oriented"
+      ],
+      "correctAnswer": 0,
+      "explanation": "organized by business subject, not by source system."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 4 - Data Warehousing",
+      "question": "Enterprise warehouse feeds a smaller repository used only by finance",
+      "options": [
+        "Finance data mart"
+      ],
+      "correctAnswer": 0,
+      "explanation": "a mart is a scoped-down subset of the full warehouse for one department."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "A proposed dimension key has duplicate/blank values",
+      "options": [
+        "must be fixed because A primary key must uniquely identify each row and should not be blank"
+      ],
+      "correctAnswer": 0,
+      "explanation": "that\u2019s the definition of a valid primary key."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Wants simple relationships, clear filter paths, efficient queries",
+      "options": [
+        "A star schema"
+      ],
+      "correctAnswer": 0,
+      "explanation": "star schema is simpler and faster than snowflake because dimensions connect directly to the fact table."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Table has Product Key, Product Name, Category, Brand (descriptive fields, no numbers to sum)",
+      "options": [
+        "It stores descriptive information for filtering and grouping"
+      ],
+      "correctAnswer": 0,
+      "explanation": "this makes it a dimension table."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Connects sales with product/customer/branch/date so users can filter consistently",
+      "options": [
+        "Data modeling"
+      ],
+      "correctAnswer": 0,
+      "explanation": "building the structure of relationships between tables is data modeling itself."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Mixes monthly balances with individual transactions in the SAME fact table without distinguishing detail levels",
+      "options": [
+        "Fact table grain was neglected"
+      ],
+      "correctAnswer": 0,
+      "explanation": "grain defines what one row represents; mixing two levels of detail breaks this."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Several bidirectional relationships create multiple filter routes (circular paths)",
+      "options": [
+        "should Prefer single-direction filtering and avoid circular relationship paths"
+      ],
+      "correctAnswer": 0,
+      "explanation": "bidirectional/circular filters cause ambiguous or incorrect results."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "An order has 3 products, and the model records ONE ROW PER PRODUCT within that order",
+      "options": [
+        "the grain is One row per product in each order"
+      ],
+      "correctAnswer": 0,
+      "explanation": "literally describes what one fact-table row represents."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Which dimension tells you the selected products are smartphones?",
+      "options": [
+        "DimProduct"
+      ],
+      "correctAnswer": 0,
+      "explanation": "product category info lives in the product dimension table."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "One product row relates to MANY sales rows",
+      "options": [
+        "the cardinality from dimension to fact should be One-to-many"
+      ],
+      "correctAnswer": 0,
+      "explanation": "one dimension entry, many matching fact entries."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Selecting a city in DimCustomer filters matching FactSales rows",
+      "options": [
+        "this works because of A relationship through matching CustomerKey columns"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the relationship is what allows filters to flow from dimension to fact."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "FactSales in the center, DimDate/Product/Customer/Branch connect directly to it",
+      "options": [
+        "Star schema"
+      ],
+      "correctAnswer": 0,
+      "explanation": "fact table in the middle, dimensions directly attached, no sub-dimension layers."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "ProductKey is TEXT in one table but a WHOLE NUMBER in the other",
+      "options": [
+        "before relating them, Use compatible data types for both key columns"
+      ],
+      "correctAnswer": 0,
+      "explanation": "relationships require matching data types on both sides."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Product, Category, and Department split into three related dimension tables",
+      "options": [
+        "Snowflake schema"
+      ],
+      "correctAnswer": 0,
+      "explanation": "dimensions normalized into further sub-tables."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Two tables with REPEATED keys connected directly produce unexpected totals",
+      "options": [
+        "investigate Many-to-many relationships first"
+      ],
+      "correctAnswer": 0,
+      "explanation": "repeated keys on both sides often signal an accidental many-to- many that inflates totals."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "A report exposes technical key columns, keeps unused fields, and relies on implicit aggregation for KPIs",
+      "options": [
+        "improve by Hide technical keys, remove unused fields, and create explicit DAX measures"
+      ],
+      "correctAnswer": 0,
+      "explanation": "cleaner, safer, and more predictable than relying on default (implicit) aggregation."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Table has Sale ID, Date Key, Product Key, Quantity, Discount, Cost, Sales Amount",
+      "options": [
+        "Fact table"
+      ],
+      "correctAnswer": 0,
+      "explanation": "it\u2019s mostly numeric measures and foreign keys, the definition of a fact table."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "\u201cTotal smartphone sales in Cebu during September\u201d - where does the AMOUNT being summed come from?",
+      "options": [
+        "FactSales"
+      ],
+      "correctAnswer": 0,
+      "explanation": "the fact table is always where you pull the numeric measure from; dimensions only filter/describe."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "Users struggle because product filters must pass through category and department tables first",
+      "options": [
+        "this is a Snowflake schema disadvantage: it creates more relationships and can complicate filter behavior"
+      ],
+      "correctAnswer": 0,
+      "explanation": "more hops between tables = harder navigation."
+    },
+    {
+      "type": "fb",
+      "category": "Quiz 5 - Data Modeling for Business Intelligence Intelligence",
+      "question": "DimProduct has one row for P101; FactSales has P101 in thousands of rows",
+      "options": [
+        "DimProduct[ProductKey] is primary; FactSales[ProductKey] is foreign"
+      ],
+      "correctAnswer": 0,
+      "explanation": "one-unique-row side = primary key, many-repeated side = foreign key."
     }
   ]
 }
